@@ -16,6 +16,7 @@ True: 'true';
 False: 'false';
 Null: 'null';
 
+For: 'For';
 If: 'if';
 Else: 'else';
 Else_if: 'else if';
@@ -74,6 +75,11 @@ WhiteSpace: [ \t\r\n]+ -> skip;
 fragment PrintableChar : [\u0020-\u007E];
 fragment EscapeChar: '\\\\' | '\\n' | '\\"';
 Cstring : '"' (PrintableChar | EscapeChar)*? '"';
+
+
+CommentLine: '//' ~[\r\n]* -> skip;
+CommentBlock: '/*' .*? '*/' -> skip;
+//Comment is learned from conless's repositories
 
 
 
