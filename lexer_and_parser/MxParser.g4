@@ -1,6 +1,6 @@
 parser grammar MxParser;
 options {
-    tokenVocab = MxLexer;
+  tokenVocab = MxLexer;
 }
 
 program: (variableDef | classDef | functionDef)* EOF;
@@ -11,19 +11,13 @@ typename: type arrayUnit*;
 
 variableConstructor: name = Identifier ('=' expression)?;
 variableDef: typename variableConstructor (',' variableConstructor)*;
-
+constant: Integer | Cstring | True | False | Null;
 
 expression:
   New type arrayUnit* ('(' ')')?          
-  | Integer
-  | Cstring
-  | Identifier
-  | True
-  | False
-  | Null
+  | constant               
   | This
-  | Identifier'(' parameterList ')' 
-  | Identifier Member Identifier ('(' parameterList ')')?
+  | Identifier
   | BitwiseNot expression
   | Substract expression
   | LogicNot expression
@@ -45,7 +39,7 @@ expression:
   | LeftParenthesis expression RightParenthesis
   
   | Identifier arrayUnit
-  | expression '(' parameterList? ')'
+  | expression '(' parameterList2? ')'
   | expression Member member = Identifier
   | <assoc = right> expression Assign expression;
 
@@ -76,9 +70,10 @@ forStatement: For '(' Initialization = statement? Condition = expressionStatemen
 expressionStatement: expression ';';
 
 
-parameterList: typename variableConstructor (',' typename variableConstructor)*;
+parameterList1: typename variableConstructor (',' typename variableConstructor)*;
+parameterList2: variableConstructor (',' variableConstructor)*;
 functionDef:
-  typename name = Identifier '(' parameterList? ')' blockStatement;
+  typename name = Identifier '(' parameterList1? ')' blockStatement;
 
 classConstructor: name = Identifier '(' ')' blockStatement;
 classDef: 
