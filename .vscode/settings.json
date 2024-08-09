@@ -1,0 +1,6 @@
+{
+  "java.project.referencedLibraries": [
+    "/usr/local/lib/*.jar",
+    "${workspace}/lib/*.jar"
+  ]
+}

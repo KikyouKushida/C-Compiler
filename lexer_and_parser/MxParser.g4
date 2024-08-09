@@ -6,25 +6,30 @@ options {
 program: (variableDef | classDef | functionDef)* EOF;
 
 type: Int | Bool | String | Void | Identifier;
-arrayUnit: ('[' Integer? ']')+;
+arrayUnit: ('[' expression? ']')+;
 typename: type arrayUnit*;
 
-variableConstructor: name = Identifier ('=' expression)?;
-variableDef: typename variableConstructor (',' variableConstructor)*;
+variableConstructor: New? name = Identifier ('=' expression)?;
+variableDef: typename variableConstructor (',' variableConstructor)* ';';
 constant: Integer | Cstring | True | False | Null;
 
 expression:
-  New type arrayUnit* ('(' ')')?          
+  expression '(' parameterList2? ')'
+  | expression arrayUnit
+  | expression SelfIncrement
+  | expression SelfDecrement
+  | expression Member member = Identifier
+  | LeftParenthesis expression RightParenthesis
+  | SelfIncrement expression
+  | SelfDecrement expression
+  | Add expression
+  | Substract expression
+  | New type arrayUnit* ('(' ')')?          
   | constant               
   | This
   | Identifier
   | BitwiseNot expression
-  | Substract expression
   | LogicNot expression
-  | SelfIncrement expression
-  | expression SelfIncrement
-  | SelfDecrement expression
-  | expression SelfDecrement
   | expression op = (Multiply | Divide | Mod) expression
   | expression op = (Add | Substract) expression
   | expression op = (BitwiseLeftShift | BitwiseRightShift) expression
@@ -36,12 +41,8 @@ expression:
   | expression op = LogicAnd expression
   | expression op = LogicOr expression
   | <assoc = right> a = expression op1 = QuestionMark b = expression op2 = Colon c = expression
-  | LeftParenthesis expression RightParenthesis
-  
-  | Identifier arrayUnit
-  | expression '(' parameterList2? ')'
-  | expression Member member = Identifier
-  | <assoc = right> expression Assign expression;
+  | <assoc = right> expression Assign expression
+  | expression Comma expression;
 
 
 
@@ -63,10 +64,10 @@ blockStatement: '{' statement* '}';
 continueStatement: Continue ';';
 breakStatement: Break ';';
 returnStatement: Return (expression)? ';';
-whileStatement: '(' expression ')' '{' (statement*) '}';
-elseStatement: Else statement;
-ifStatement: If '(' expression ')' statement (elseStatement)?;
-forStatement: For '(' Initialization = statement? Condition = expressionStatement? Step = expressionStatement ')';
+whileStatement: While '(' expression ')' Body = statement;
+elseStatement: Else Body = statement;
+ifStatement: If '(' expression ')' Body = statement (elseStatement)?;
+forStatement: For '(' Initialization = statement? Condition = expression? ';' Step = expression? ')' Body = statement;
 expressionStatement: expression ';';
 
 
@@ -79,7 +80,7 @@ classConstructor: name = Identifier '(' ')' blockStatement;
 classDef: 
   Class name = Identifier '{'
     (
-      variableDef ';'
+      variableDef
       | functionDef
       | classConstructor
     )*

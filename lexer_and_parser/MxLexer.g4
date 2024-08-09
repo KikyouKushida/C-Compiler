@@ -16,7 +16,7 @@ True: 'true';
 False: 'false';
 Null: 'null';
 
-For: 'For';
+For: 'for';
 If: 'if';
 Else: 'else';
 Else_if: 'else if';

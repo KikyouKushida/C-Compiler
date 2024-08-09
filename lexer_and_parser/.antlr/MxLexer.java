@@ -1,4 +1,4 @@
-// Generated from /home/remosk/compiler/lexer&parser/MxLexer.g4 by ANTLR 4.13.1
+// Generated from /home/remosk/compiler/lexer_and_parser/MxLexer.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -53,7 +53,7 @@ public class MxLexer extends Lexer {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'int'", "'void'", "'bool'", "'string'", "'new'", "'class'", "'this'", 
-			"'true'", "'false'", "'null'", "'For'", "'if'", "'else'", "'else if'", 
+			"'true'", "'false'", "'null'", "'for'", "'if'", "'else'", "'else if'", 
 			"'break'", "'continue'", "'while'", "'return'", null, null, "'>'", "'<'", 
 			"'>='", "'<='", "'=='", "'!='", "'&'", "'|'", "'^'", "'~'", "'>>'", "'<<'", 
 			"'&&'", "'||'", "'!'", "'='", "'++'", "'--'", "')'", "'('", "']'", "'['", 
@@ -265,7 +265,7 @@ public class MxLexer extends Lexer {
 		"\u0000\u0000\u00a5\u00a6\u0005s\u0000\u0000\u00a6\u00a7\u0005e\u0000\u0000"+
 		"\u00a7\u0012\u0001\u0000\u0000\u0000\u00a8\u00a9\u0005n\u0000\u0000\u00a9"+
 		"\u00aa\u0005u\u0000\u0000\u00aa\u00ab\u0005l\u0000\u0000\u00ab\u00ac\u0005"+
-		"l\u0000\u0000\u00ac\u0014\u0001\u0000\u0000\u0000\u00ad\u00ae\u0005F\u0000"+
+		"l\u0000\u0000\u00ac\u0014\u0001\u0000\u0000\u0000\u00ad\u00ae\u0005f\u0000"+
 		"\u0000\u00ae\u00af\u0005o\u0000\u0000\u00af\u00b0\u0005r\u0000\u0000\u00b0"+
 		"\u0016\u0001\u0000\u0000\u0000\u00b1\u00b2\u0005i\u0000\u0000\u00b2\u00b3"+
 		"\u0005f\u0000\u0000\u00b3\u0018\u0001\u0000\u0000\u0000\u00b4\u00b5\u0005"+
