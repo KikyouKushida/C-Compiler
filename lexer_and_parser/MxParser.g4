@@ -11,7 +11,7 @@ typename: type arrayUnit*;
 
 variableConstructor: New? name = Identifier ('=' expression)?;
 variableDef: typename variableConstructor (',' variableConstructor)* ';';
-constant: Integer | Cstring | True | False | Null;
+constant: Integer | Cstring | True_ | False_ | Null;
 
 expression:
   expression '(' parameterList2? ')'
@@ -72,7 +72,7 @@ expressionStatement: expression ';';
 
 
 parameterList1: typename variableConstructor (',' typename variableConstructor)*;
-parameterList2: variableConstructor (',' variableConstructor)*;
+parameterList2: expression (',' expression)*;
 functionDef:
   typename name = Identifier '(' parameterList1? ')' blockStatement;
 

@@ -12,8 +12,8 @@ New: 'new';
 Class: 'class';
 This: 'this';
 
-True: 'true';
-False: 'false';
+True_: 'true';
+False_: 'false';
 Null: 'null';
 
 For: 'for';

@@ -7,6 +7,7 @@ Verdict: Success
 Origin Package: Semantic Pretest
 */
 
+/*
 int main(){
 	int[] a = new int[3];
 	print("I have done " + toString(a.size()) + " little things");
@@ -19,4 +20,10 @@ int main(){
 	println(toString(s3.parseInt()));
 	string s4 = "45 best songs";
 	return s4.ord(5);
+}
+*/
+
+int main(){
+	"test string";
+	return 0;
 }

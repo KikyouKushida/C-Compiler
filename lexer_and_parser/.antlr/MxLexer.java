@@ -16,7 +16,7 @@ public class MxLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		Int=1, Void=2, Bool=3, String=4, New=5, Class=6, This=7, True=8, False=9, 
+		Int=1, Void=2, Bool=3, String=4, New=5, Class=6, This=7, True_=8, False_=9, 
 		Null=10, For=11, If=12, Else=13, Else_if=14, Break=15, Continue=16, While=17, 
 		Return=18, Identifier=19, Integer=20, Greater=21, Less=22, GreaterEqual=23, 
 		LessEqual=24, Equal=25, NotEqual=26, BitwiseAnd=27, BitwiseOr=28, BitwiseXor=29, 
@@ -36,7 +36,7 @@ public class MxLexer extends Lexer {
 
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"Int", "Void", "Bool", "String", "New", "Class", "This", "True", "False", 
+			"Int", "Void", "Bool", "String", "New", "Class", "This", "True_", "False_", 
 			"Null", "For", "If", "Else", "Else_if", "Break", "Continue", "While", 
 			"Return", "Identifier", "Integer", "Greater", "Less", "GreaterEqual", 
 			"LessEqual", "Equal", "NotEqual", "BitwiseAnd", "BitwiseOr", "BitwiseXor", 
@@ -64,8 +64,8 @@ public class MxLexer extends Lexer {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "Int", "Void", "Bool", "String", "New", "Class", "This", "True", 
-			"False", "Null", "For", "If", "Else", "Else_if", "Break", "Continue", 
+			null, "Int", "Void", "Bool", "String", "New", "Class", "This", "True_", 
+			"False_", "Null", "For", "If", "Else", "Else_if", "Break", "Continue", 
 			"While", "Return", "Identifier", "Integer", "Greater", "Less", "GreaterEqual", 
 			"LessEqual", "Equal", "NotEqual", "BitwiseAnd", "BitwiseOr", "BitwiseXor", 
 			"BitwiseNot", "BitwiseRightShift", "BitwiseLeftShift", "LogicAnd", "LogicOr", 

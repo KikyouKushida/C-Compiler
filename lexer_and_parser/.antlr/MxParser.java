@@ -16,7 +16,7 @@ public class MxParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		Int=1, Void=2, Bool=3, String=4, New=5, Class=6, This=7, True=8, False=9, 
+		Int=1, Void=2, Bool=3, String=4, New=5, Class=6, This=7, True_=8, False_=9, 
 		Null=10, For=11, If=12, Else=13, Else_if=14, Break=15, Continue=16, While=17, 
 		Return=18, Identifier=19, Integer=20, Greater=21, Less=22, GreaterEqual=23, 
 		LessEqual=24, Equal=25, NotEqual=26, BitwiseAnd=27, BitwiseOr=28, BitwiseXor=29, 
@@ -50,7 +50,7 @@ public class MxParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'int'", "'void'", "'bool'", "'string'", "'new'", "'class'", "'this'", 
-			"'true'", "'false'", "'null'", "'For'", "'if'", "'else'", "'else if'", 
+			"'true'", "'false'", "'null'", "'for'", "'if'", "'else'", "'else if'", 
 			"'break'", "'continue'", "'while'", "'return'", null, null, "'>'", "'<'", 
 			"'>='", "'<='", "'=='", "'!='", "'&'", "'|'", "'^'", "'~'", "'>>'", "'<<'", 
 			"'&&'", "'||'", "'!'", "'='", "'++'", "'--'", "')'", "'('", "']'", "'['", 
@@ -61,8 +61,8 @@ public class MxParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "Int", "Void", "Bool", "String", "New", "Class", "This", "True", 
-			"False", "Null", "For", "If", "Else", "Else_if", "Break", "Continue", 
+			null, "Int", "Void", "Bool", "String", "New", "Class", "This", "True_", 
+			"False_", "Null", "For", "If", "Else", "Else_if", "Break", "Continue", 
 			"While", "Return", "Identifier", "Integer", "Greater", "Less", "GreaterEqual", 
 			"LessEqual", "Equal", "NotEqual", "BitwiseAnd", "BitwiseOr", "BitwiseXor", 
 			"BitwiseNot", "BitwiseRightShift", "BitwiseLeftShift", "LogicAnd", "LogicOr", 
@@ -503,8 +503,8 @@ public class MxParser extends Parser {
 	public static class ConstantContext extends ParserRuleContext {
 		public TerminalNode Integer() { return getToken(MxParser.Integer, 0); }
 		public TerminalNode Cstring() { return getToken(MxParser.Cstring, 0); }
-		public TerminalNode True() { return getToken(MxParser.True, 0); }
-		public TerminalNode False() { return getToken(MxParser.False, 0); }
+		public TerminalNode True_() { return getToken(MxParser.True_, 0); }
+		public TerminalNode False_() { return getToken(MxParser.False_, 0); }
 		public TerminalNode Null() { return getToken(MxParser.Null, 0); }
 		public ConstantContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -707,8 +707,8 @@ public class MxParser extends Parser {
 				}
 				}
 				break;
-			case True:
-			case False:
+			case True_:
+			case False_:
 			case Null:
 			case Integer:
 			case Cstring:
@@ -977,7 +977,7 @@ public class MxParser extends Parser {
 						setState(176);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
-						if (_la==New || _la==Identifier) {
+						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 72164694417737632L) != 0)) {
 							{
 							setState(175);
 							parameterList2();
@@ -1709,11 +1709,11 @@ public class MxParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ParameterList2Context extends ParserRuleContext {
-		public List<VariableConstructorContext> variableConstructor() {
-			return getRuleContexts(VariableConstructorContext.class);
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
 		}
-		public VariableConstructorContext variableConstructor(int i) {
-			return getRuleContext(VariableConstructorContext.class,i);
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public List<TerminalNode> Comma() { return getTokens(MxParser.Comma); }
 		public TerminalNode Comma(int i) {
@@ -1733,7 +1733,7 @@ public class MxParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(274);
-			variableConstructor();
+			expression(0);
 			setState(279);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1743,7 +1743,7 @@ public class MxParser extends Parser {
 				setState(275);
 				match(Comma);
 				setState(276);
-				variableConstructor();
+				expression(0);
 				}
 				}
 				setState(281);
@@ -2197,27 +2197,27 @@ public class MxParser extends Parser {
 		"\u0000\u010d\u0109\u0001\u0000\u0000\u0000\u010e\u0111\u0001\u0000\u0000"+
 		"\u0000\u010f\u010d\u0001\u0000\u0000\u0000\u010f\u0110\u0001\u0000\u0000"+
 		"\u0000\u0110\'\u0001\u0000\u0000\u0000\u0111\u010f\u0001\u0000\u0000\u0000"+
-		"\u0112\u0117\u0003\b\u0004\u0000\u0113\u0114\u00055\u0000\u0000\u0114"+
-		"\u0116\u0003\b\u0004\u0000\u0115\u0113\u0001\u0000\u0000\u0000\u0116\u0119"+
-		"\u0001\u0000\u0000\u0000\u0117\u0115\u0001\u0000\u0000\u0000\u0117\u0118"+
-		"\u0001\u0000\u0000\u0000\u0118)\u0001\u0000\u0000\u0000\u0119\u0117\u0001"+
-		"\u0000\u0000\u0000\u011a\u011b\u0003\u0006\u0003\u0000\u011b\u011c\u0005"+
-		"\u0013\u0000\u0000\u011c\u011e\u0005(\u0000\u0000\u011d\u011f\u0003&\u0013"+
-		"\u0000\u011e\u011d\u0001\u0000\u0000\u0000\u011e\u011f\u0001\u0000\u0000"+
-		"\u0000\u011f\u0120\u0001\u0000\u0000\u0000\u0120\u0121\u0005\'\u0000\u0000"+
-		"\u0121\u0122\u0003\u0014\n\u0000\u0122+\u0001\u0000\u0000\u0000\u0123"+
-		"\u0124\u0005\u0013\u0000\u0000\u0124\u0125\u0005(\u0000\u0000\u0125\u0126"+
-		"\u0005\'\u0000\u0000\u0126\u0127\u0003\u0014\n\u0000\u0127-\u0001\u0000"+
-		"\u0000\u0000\u0128\u0129\u0005\u0006\u0000\u0000\u0129\u012a\u0005\u0013"+
-		"\u0000\u0000\u012a\u0130\u0005,\u0000\u0000\u012b\u012f\u0003\n\u0005"+
-		"\u0000\u012c\u012f\u0003*\u0015\u0000\u012d\u012f\u0003,\u0016\u0000\u012e"+
-		"\u012b\u0001\u0000\u0000\u0000\u012e\u012c\u0001\u0000\u0000\u0000\u012e"+
-		"\u012d\u0001\u0000\u0000\u0000\u012f\u0132\u0001\u0000\u0000\u0000\u0130"+
-		"\u012e\u0001\u0000\u0000\u0000\u0130\u0131\u0001\u0000\u0000\u0000\u0131"+
-		"\u0133\u0001\u0000\u0000\u0000\u0132\u0130\u0001\u0000\u0000\u0000\u0133"+
-		"\u0134\u0005+\u0000\u0000\u0134\u0135\u00054\u0000\u0000\u0135/\u0001"+
-		"\u0000\u0000\u0000\u001a35>CIMRZsx\u0081\u00b0\u00bc\u00be\u00cb\u00d3"+
-		"\u00e0\u00f3\u00f8\u00fb\u00ff\u010f\u0117\u011e\u012e\u0130";
+		"\u0112\u0117\u0003\u000e\u0007\u0000\u0113\u0114\u00055\u0000\u0000\u0114"+
+		"\u0116\u0003\u000e\u0007\u0000\u0115\u0113\u0001\u0000\u0000\u0000\u0116"+
+		"\u0119\u0001\u0000\u0000\u0000\u0117\u0115\u0001\u0000\u0000\u0000\u0117"+
+		"\u0118\u0001\u0000\u0000\u0000\u0118)\u0001\u0000\u0000\u0000\u0119\u0117"+
+		"\u0001\u0000\u0000\u0000\u011a\u011b\u0003\u0006\u0003\u0000\u011b\u011c"+
+		"\u0005\u0013\u0000\u0000\u011c\u011e\u0005(\u0000\u0000\u011d\u011f\u0003"+
+		"&\u0013\u0000\u011e\u011d\u0001\u0000\u0000\u0000\u011e\u011f\u0001\u0000"+
+		"\u0000\u0000\u011f\u0120\u0001\u0000\u0000\u0000\u0120\u0121\u0005\'\u0000"+
+		"\u0000\u0121\u0122\u0003\u0014\n\u0000\u0122+\u0001\u0000\u0000\u0000"+
+		"\u0123\u0124\u0005\u0013\u0000\u0000\u0124\u0125\u0005(\u0000\u0000\u0125"+
+		"\u0126\u0005\'\u0000\u0000\u0126\u0127\u0003\u0014\n\u0000\u0127-\u0001"+
+		"\u0000\u0000\u0000\u0128\u0129\u0005\u0006\u0000\u0000\u0129\u012a\u0005"+
+		"\u0013\u0000\u0000\u012a\u0130\u0005,\u0000\u0000\u012b\u012f\u0003\n"+
+		"\u0005\u0000\u012c\u012f\u0003*\u0015\u0000\u012d\u012f\u0003,\u0016\u0000"+
+		"\u012e\u012b\u0001\u0000\u0000\u0000\u012e\u012c\u0001\u0000\u0000\u0000"+
+		"\u012e\u012d\u0001\u0000\u0000\u0000\u012f\u0132\u0001\u0000\u0000\u0000"+
+		"\u0130\u012e\u0001\u0000\u0000\u0000\u0130\u0131\u0001\u0000\u0000\u0000"+
+		"\u0131\u0133\u0001\u0000\u0000\u0000\u0132\u0130\u0001\u0000\u0000\u0000"+
+		"\u0133\u0134\u0005+\u0000\u0000\u0134\u0135\u00054\u0000\u0000\u0135/"+
+		"\u0001\u0000\u0000\u0000\u001a35>CIMRZsx\u0081\u00b0\u00bc\u00be\u00cb"+
+		"\u00d3\u00e0\u00f3\u00f8\u00fb\u00ff\u010f\u0117\u011e\u012e\u0130";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
