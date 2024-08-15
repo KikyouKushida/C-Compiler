@@ -7,7 +7,7 @@ def main(input_stream):
     lexer = MxLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = MxParser(stream)
-    tree = parser.startRule()  # 用你的起始规则替换 startRule
+    tree = parser.program()
     visitor = My_MxParserVisitor()
     visitor.visit(tree)
 

@@ -1,5 +1,14 @@
 
 
+class A{
+  int b, c;
+
+};
+
+string str;
+
+
+
 int main(){
   int a = 1, b = 1;
   printlnInt(a + b);
