@@ -22,12 +22,46 @@ def Error_invalid_control_flow(name):
     print(f"Invalid control flow, {name} out of any function's domain")
     sys.exit(1)
 
+def Error_unknown_identifier(name):
+    print(f"Unknown Identifier {name}")
+    sys.exit(1)
 
-class Expression:
-    def __init__(self, name, type, value):
-        self.name = name
-        self.type = type
-        self.value = value
+
+def Error_Invalid_variable_or_object_name(op, name):
+    if op == 1:
+        print(f"Invalid variable name {name}")
+    else:
+        print(f"Invalid object name {name}")
+
+from enum import Enum
+
+class ExpressionType(Enum):
+    Int = 1
+    Bool = 2
+    Void = 3
+    Cstring = 4
+    Object = 5
+    Unknown = 6
+
+
+class functionInformation():
+    def __init__(self):
+        self.returnType = ""
+        self.name = ""
+        self.parameterListType = []
+        self.parameterListName = []
+
+class classInformation():
+    def __init__(self):
+        self.name = ""
+        self.variable = {}
+        self.function = {}
+
+
+class scopeInformation():
+    variable_object = {}
+    class_object = {}
+    array_dimension = {}
 
 def check_type_equal(a, b):
     if a.type != b.type:
@@ -39,24 +73,11 @@ def check_type_equal(a, b):
   
     return True
 
-class function_information:
-    def __init__(self, name, definition_type):
-        self.name = name
-        self.definition_type = definition_type
-        self.return_type = None
-    def change_return_type(self, return_type):
-        self.return_type = return_type
-        if return_type != self.definition_type:
-            Error_return_type_dismatch(self.name)
-
 class_name_set = {}
 function_name_set = {}
-variable_name_set = {}
-
-array_dimension = {}
 
 def check_multiple_identifier(name):
-    if class_name_set.get(name) != None or function_name_set.get(name) != None or variable_name_set.get(name) != None:
+    if class_name_set.get(name) != None or function_name_set.get(name) != None or variable_object.get(name) != None:
         Error_multiple_definitions(name)
     return False
 
@@ -71,7 +92,7 @@ class My_MxParserVisitor(MxParserVisitor):
         self.function_main_count = 0
         self.current_function = None
 
-        
+
     def visitProgram(self, ctx: MxParser.ProgramContext):
         # 遍历 program 节点的所有子节点
         self.priority += 1
@@ -107,7 +128,7 @@ class My_MxParserVisitor(MxParserVisitor):
     def visitVariableDef(self, ctx: MxParser.VariableDefContext):
         variable_name = ctx.variableConstructor()[0].Identifier().getText()
         if check_multiple_identifier(variable_name) == False: True
-        variable_name_set[variable_name] = 1
+        variable_object[variable_name] = 1
         print(f"Variable Definition: {variable_name}")
         return self.visitChildren(ctx)
 
@@ -121,3 +142,44 @@ class My_MxParserVisitor(MxParserVisitor):
         if self.current_function == None:
             Error_invalid_control_flow("continue")
         return self.visitChildren(ctx)
+
+
+
+    def visitExpression(self, ctx: MxParser.ExpressionContext):
+        if isinstance(ctx, MxParser.ExpressionConstantContext):
+            constant = ctx.constant()
+            if constant.Integer() != None:
+                return "int[0]"
+            elif constant.Cstring() != None:
+                return "string[0]"
+            elif constant.True_() != None:
+                return "bool[0]"
+            elif constant.False_() != None:
+                return "false[0]"
+            else:
+                return "null"
+        if isinstance(ctx, MxParser.)
+    
+
+    def getIdentifierType(self, identifier):
+        # Determine the type of an identifier (e.g., variable type)
+        # This function should be implemented based on your specific context
+        if class_name_set.get(identifier) != None: 
+            # print(f"Error: class object {class_name_set[identifier]} {identifier} become an expression.")
+            # sys.exit(1)
+            return ExpressionType.Object
+        if variable_object.get(identifier) != None:
+            tmp = variable_object[identifier]
+            return tmp
+        return ExpressionType.Unknown
+
+    def getConstantType(self, constant):
+        # Determine the type of a constant
+        # This function should be implemented based on your specific context
+        if constant.isdigit():
+            return ExpressionType.INTEGER
+        try:
+            float(constant)
+            return ExprType.FLOAT
+        except ValueError:
+            return ExprType.STRING    

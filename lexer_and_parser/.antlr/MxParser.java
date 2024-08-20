@@ -544,25 +544,174 @@ public class MxParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExpressionContext extends ParserRuleContext {
-		public ExpressionContext a;
+		public ExpressionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_expression; }
+	 
+		public ExpressionContext() { }
+		public void copyFrom(ExpressionContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionLogicAndContext extends ExpressionContext {
 		public Token op;
-		public Token op1;
-		public ExpressionContext b;
-		public Token op2;
-		public ExpressionContext c;
-		public Token member;
-		public TerminalNode LeftParenthesis() { return getToken(MxParser.LeftParenthesis, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode RightParenthesis() { return getToken(MxParser.RightParenthesis, 0); }
-		public TerminalNode SelfIncrement() { return getToken(MxParser.SelfIncrement, 0); }
+		public TerminalNode LogicAnd() { return getToken(MxParser.LogicAnd, 0); }
+		public ExpressionLogicAndContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionArrayUnitContext extends ExpressionContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ArrayUnitContext arrayUnit() {
+			return getRuleContext(ArrayUnitContext.class,0);
+		}
+		public ExpressionArrayUnitContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionAssignContext extends ExpressionContext {
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode Assign() { return getToken(MxParser.Assign, 0); }
+		public ExpressionAssignContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionMemberVisitContext extends ExpressionContext {
+		public Token member;
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode Member() { return getToken(MxParser.Member, 0); }
+		public TerminalNode Identifier() { return getToken(MxParser.Identifier, 0); }
+		public ExpressionMemberVisitContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionTrinocularContext extends ExpressionContext {
+		public ExpressionContext a;
+		public Token op1;
+		public ExpressionContext b;
+		public Token op2;
+		public ExpressionContext c;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode QuestionMark() { return getToken(MxParser.QuestionMark, 0); }
+		public TerminalNode Colon() { return getToken(MxParser.Colon, 0); }
+		public ExpressionTrinocularContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionBitwiseXorContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode BitwiseXor() { return getToken(MxParser.BitwiseXor, 0); }
+		public ExpressionBitwiseXorContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionBitwiseShiftContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode BitwiseLeftShift() { return getToken(MxParser.BitwiseLeftShift, 0); }
+		public TerminalNode BitwiseRightShift() { return getToken(MxParser.BitwiseRightShift, 0); }
+		public ExpressionBitwiseShiftContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionBitwiseOrContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode BitwiseOr() { return getToken(MxParser.BitwiseOr, 0); }
+		public ExpressionBitwiseOrContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionPreSelfDecrementContext extends ExpressionContext {
 		public TerminalNode SelfDecrement() { return getToken(MxParser.SelfDecrement, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ExpressionPreSelfDecrementContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionSufSelfIncrementContext extends ExpressionContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode SelfIncrement() { return getToken(MxParser.SelfIncrement, 0); }
+		public ExpressionSufSelfIncrementContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionLogicNotContext extends ExpressionContext {
+		public TerminalNode LogicNot() { return getToken(MxParser.LogicNot, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ExpressionLogicNotContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionArithmeticOp1Context extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode Multiply() { return getToken(MxParser.Multiply, 0); }
+		public TerminalNode Divide() { return getToken(MxParser.Divide, 0); }
+		public TerminalNode Mod() { return getToken(MxParser.Mod, 0); }
+		public ExpressionArithmeticOp1Context(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionArithmeticOp2Context extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
 		public TerminalNode Add() { return getToken(MxParser.Add, 0); }
 		public TerminalNode Substract() { return getToken(MxParser.Substract, 0); }
+		public ExpressionArithmeticOp2Context(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionAddContext extends ExpressionContext {
+		public TerminalNode Add() { return getToken(MxParser.Add, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ExpressionAddContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionNewContext extends ExpressionContext {
 		public TerminalNode New() { return getToken(MxParser.New, 0); }
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
@@ -573,41 +722,143 @@ public class MxParser extends Parser {
 		public ArrayUnitContext arrayUnit(int i) {
 			return getRuleContext(ArrayUnitContext.class,i);
 		}
-		public ConstantContext constant() {
-			return getRuleContext(ConstantContext.class,0);
+		public TerminalNode LeftParenthesis() { return getToken(MxParser.LeftParenthesis, 0); }
+		public TerminalNode RightParenthesis() { return getToken(MxParser.RightParenthesis, 0); }
+		public ExpressionNewContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionCompare1Context extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
 		}
-		public TerminalNode This() { return getToken(MxParser.This, 0); }
-		public TerminalNode Identifier() { return getToken(MxParser.Identifier, 0); }
-		public TerminalNode BitwiseNot() { return getToken(MxParser.BitwiseNot, 0); }
-		public TerminalNode LogicNot() { return getToken(MxParser.LogicNot, 0); }
-		public TerminalNode Multiply() { return getToken(MxParser.Multiply, 0); }
-		public TerminalNode Divide() { return getToken(MxParser.Divide, 0); }
-		public TerminalNode Mod() { return getToken(MxParser.Mod, 0); }
-		public TerminalNode BitwiseLeftShift() { return getToken(MxParser.BitwiseLeftShift, 0); }
-		public TerminalNode BitwiseRightShift() { return getToken(MxParser.BitwiseRightShift, 0); }
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
 		public TerminalNode Less() { return getToken(MxParser.Less, 0); }
 		public TerminalNode Greater() { return getToken(MxParser.Greater, 0); }
 		public TerminalNode LessEqual() { return getToken(MxParser.LessEqual, 0); }
 		public TerminalNode GreaterEqual() { return getToken(MxParser.GreaterEqual, 0); }
+		public ExpressionCompare1Context(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionCompare2Context extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
 		public TerminalNode Equal() { return getToken(MxParser.Equal, 0); }
 		public TerminalNode NotEqual() { return getToken(MxParser.NotEqual, 0); }
-		public TerminalNode BitwiseAnd() { return getToken(MxParser.BitwiseAnd, 0); }
-		public TerminalNode BitwiseXor() { return getToken(MxParser.BitwiseXor, 0); }
-		public TerminalNode BitwiseOr() { return getToken(MxParser.BitwiseOr, 0); }
-		public TerminalNode LogicAnd() { return getToken(MxParser.LogicAnd, 0); }
+		public ExpressionCompare2Context(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionLogicOrContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
 		public TerminalNode LogicOr() { return getToken(MxParser.LogicOr, 0); }
-		public TerminalNode QuestionMark() { return getToken(MxParser.QuestionMark, 0); }
-		public TerminalNode Colon() { return getToken(MxParser.Colon, 0); }
-		public TerminalNode Assign() { return getToken(MxParser.Assign, 0); }
-		public TerminalNode Comma() { return getToken(MxParser.Comma, 0); }
+		public ExpressionLogicOrContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionFunctionCallContext extends ExpressionContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode LeftParenthesis() { return getToken(MxParser.LeftParenthesis, 0); }
+		public TerminalNode RightParenthesis() { return getToken(MxParser.RightParenthesis, 0); }
 		public ParameterList2Context parameterList2() {
 			return getRuleContext(ParameterList2Context.class,0);
 		}
-		public TerminalNode Member() { return getToken(MxParser.Member, 0); }
-		public ExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
+		public ExpressionFunctionCallContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionBracketContext extends ExpressionContext {
+		public TerminalNode LeftParenthesis() { return getToken(MxParser.LeftParenthesis, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
-		@Override public int getRuleIndex() { return RULE_expression; }
+		public TerminalNode RightParenthesis() { return getToken(MxParser.RightParenthesis, 0); }
+		public ExpressionBracketContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionBitwiseAndContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode BitwiseAnd() { return getToken(MxParser.BitwiseAnd, 0); }
+		public ExpressionBitwiseAndContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionCommaContext extends ExpressionContext {
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode Comma() { return getToken(MxParser.Comma, 0); }
+		public ExpressionCommaContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionBitwiseNotContext extends ExpressionContext {
+		public TerminalNode BitwiseNot() { return getToken(MxParser.BitwiseNot, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ExpressionBitwiseNotContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionIdentifierContext extends ExpressionContext {
+		public TerminalNode Identifier() { return getToken(MxParser.Identifier, 0); }
+		public ExpressionIdentifierContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionSufSelfDecrementContext extends ExpressionContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public TerminalNode SelfDecrement() { return getToken(MxParser.SelfDecrement, 0); }
+		public ExpressionSufSelfDecrementContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionConstantContext extends ExpressionContext {
+		public ConstantContext value;
+		public ConstantContext constant() {
+			return getRuleContext(ConstantContext.class,0);
+		}
+		public ExpressionConstantContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionSubtractContext extends ExpressionContext {
+		public TerminalNode Substract() { return getToken(MxParser.Substract, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ExpressionSubtractContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionThisContext extends ExpressionContext {
+		public TerminalNode This() { return getToken(MxParser.This, 0); }
+		public ExpressionThisContext(ExpressionContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExpressionPreSelfIncrementContext extends ExpressionContext {
+		public TerminalNode SelfIncrement() { return getToken(MxParser.SelfIncrement, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public ExpressionPreSelfIncrementContext(ExpressionContext ctx) { copyFrom(ctx); }
 	}
 
 	public final ExpressionContext expression() throws RecognitionException {
@@ -631,6 +882,10 @@ public class MxParser extends Parser {
 			switch (_input.LA(1)) {
 			case LeftParenthesis:
 				{
+				_localctx = new ExpressionBracketContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+
 				setState(98);
 				match(LeftParenthesis);
 				setState(99);
@@ -641,6 +896,9 @@ public class MxParser extends Parser {
 				break;
 			case SelfIncrement:
 				{
+				_localctx = new ExpressionPreSelfIncrementContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(102);
 				match(SelfIncrement);
 				setState(103);
@@ -649,6 +907,9 @@ public class MxParser extends Parser {
 				break;
 			case SelfDecrement:
 				{
+				_localctx = new ExpressionPreSelfDecrementContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(104);
 				match(SelfDecrement);
 				setState(105);
@@ -657,6 +918,9 @@ public class MxParser extends Parser {
 				break;
 			case Add:
 				{
+				_localctx = new ExpressionAddContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(106);
 				match(Add);
 				setState(107);
@@ -665,6 +929,9 @@ public class MxParser extends Parser {
 				break;
 			case Substract:
 				{
+				_localctx = new ExpressionSubtractContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(108);
 				match(Substract);
 				setState(109);
@@ -673,6 +940,9 @@ public class MxParser extends Parser {
 				break;
 			case New:
 				{
+				_localctx = new ExpressionNewContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(110);
 				match(New);
 				setState(111);
@@ -713,24 +983,36 @@ public class MxParser extends Parser {
 			case Integer:
 			case Cstring:
 				{
+				_localctx = new ExpressionConstantContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(122);
-				constant();
+				((ExpressionConstantContext)_localctx).value = constant();
 				}
 				break;
 			case This:
 				{
+				_localctx = new ExpressionThisContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(123);
 				match(This);
 				}
 				break;
 			case Identifier:
 				{
+				_localctx = new ExpressionIdentifierContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(124);
 				match(Identifier);
 				}
 				break;
 			case BitwiseNot:
 				{
+				_localctx = new ExpressionBitwiseNotContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(125);
 				match(BitwiseNot);
 				setState(126);
@@ -739,6 +1021,9 @@ public class MxParser extends Parser {
 				break;
 			case LogicNot:
 				{
+				_localctx = new ExpressionLogicNotContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(127);
 				match(LogicNot);
 				setState(128);
@@ -762,15 +1047,15 @@ public class MxParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
 					case 1:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionArithmeticOp1Context(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(131);
 						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
 						setState(132);
-						((ExpressionContext)_localctx).op = _input.LT(1);
+						((ExpressionArithmeticOp1Context)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 985162418487296L) != 0)) ) {
-							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+							((ExpressionArithmeticOp1Context)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
 							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
@@ -783,15 +1068,15 @@ public class MxParser extends Parser {
 						break;
 					case 2:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionArithmeticOp2Context(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(134);
 						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
 						setState(135);
-						((ExpressionContext)_localctx).op = _input.LT(1);
+						((ExpressionArithmeticOp2Context)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==Add || _la==Substract) ) {
-							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+							((ExpressionArithmeticOp2Context)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
 							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
@@ -804,15 +1089,15 @@ public class MxParser extends Parser {
 						break;
 					case 3:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionBitwiseShiftContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(137);
 						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
 						setState(138);
-						((ExpressionContext)_localctx).op = _input.LT(1);
+						((ExpressionBitwiseShiftContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==BitwiseRightShift || _la==BitwiseLeftShift) ) {
-							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+							((ExpressionBitwiseShiftContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
 							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
@@ -825,15 +1110,15 @@ public class MxParser extends Parser {
 						break;
 					case 4:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionCompare1Context(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(140);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
 						setState(141);
-						((ExpressionContext)_localctx).op = _input.LT(1);
+						((ExpressionCompare1Context)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 31457280L) != 0)) ) {
-							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+							((ExpressionCompare1Context)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
 							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
@@ -846,15 +1131,15 @@ public class MxParser extends Parser {
 						break;
 					case 5:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionCompare2Context(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(143);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
 						setState(144);
-						((ExpressionContext)_localctx).op = _input.LT(1);
+						((ExpressionCompare2Context)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==Equal || _la==NotEqual) ) {
-							((ExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+							((ExpressionCompare2Context)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
 							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
@@ -867,84 +1152,84 @@ public class MxParser extends Parser {
 						break;
 					case 6:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionBitwiseAndContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(146);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
 						setState(147);
-						((ExpressionContext)_localctx).op = match(BitwiseAnd);
+						((ExpressionBitwiseAndContext)_localctx).op = match(BitwiseAnd);
 						setState(148);
 						expression(9);
 						}
 						break;
 					case 7:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionBitwiseXorContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(149);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
 						setState(150);
-						((ExpressionContext)_localctx).op = match(BitwiseXor);
+						((ExpressionBitwiseXorContext)_localctx).op = match(BitwiseXor);
 						setState(151);
 						expression(8);
 						}
 						break;
 					case 8:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionBitwiseOrContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(152);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
 						setState(153);
-						((ExpressionContext)_localctx).op = match(BitwiseOr);
+						((ExpressionBitwiseOrContext)_localctx).op = match(BitwiseOr);
 						setState(154);
 						expression(7);
 						}
 						break;
 					case 9:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionLogicAndContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(155);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(156);
-						((ExpressionContext)_localctx).op = match(LogicAnd);
+						((ExpressionLogicAndContext)_localctx).op = match(LogicAnd);
 						setState(157);
 						expression(6);
 						}
 						break;
 					case 10:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionLogicOrContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(158);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(159);
-						((ExpressionContext)_localctx).op = match(LogicOr);
+						((ExpressionLogicOrContext)_localctx).op = match(LogicOr);
 						setState(160);
 						expression(5);
 						}
 						break;
 					case 11:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						_localctx.a = _prevctx;
+						_localctx = new ExpressionTrinocularContext(new ExpressionContext(_parentctx, _parentState));
+						((ExpressionTrinocularContext)_localctx).a = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(161);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(162);
-						((ExpressionContext)_localctx).op1 = match(QuestionMark);
+						((ExpressionTrinocularContext)_localctx).op1 = match(QuestionMark);
 						setState(163);
-						((ExpressionContext)_localctx).b = expression(0);
+						((ExpressionTrinocularContext)_localctx).b = expression(0);
 						setState(164);
-						((ExpressionContext)_localctx).op2 = match(Colon);
+						((ExpressionTrinocularContext)_localctx).op2 = match(Colon);
 						setState(165);
-						((ExpressionContext)_localctx).c = expression(3);
+						((ExpressionTrinocularContext)_localctx).c = expression(3);
 						}
 						break;
 					case 12:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionAssignContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(167);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
@@ -956,7 +1241,7 @@ public class MxParser extends Parser {
 						break;
 					case 13:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionCommaContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(170);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
@@ -968,7 +1253,7 @@ public class MxParser extends Parser {
 						break;
 					case 14:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionFunctionCallContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(173);
 						if (!(precpred(_ctx, 29))) throw new FailedPredicateException(this, "precpred(_ctx, 29)");
@@ -990,7 +1275,7 @@ public class MxParser extends Parser {
 						break;
 					case 15:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionArrayUnitContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(179);
 						if (!(precpred(_ctx, 28))) throw new FailedPredicateException(this, "precpred(_ctx, 28)");
@@ -1000,7 +1285,7 @@ public class MxParser extends Parser {
 						break;
 					case 16:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionSufSelfIncrementContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(181);
 						if (!(precpred(_ctx, 27))) throw new FailedPredicateException(this, "precpred(_ctx, 27)");
@@ -1010,7 +1295,7 @@ public class MxParser extends Parser {
 						break;
 					case 17:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionSufSelfDecrementContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(183);
 						if (!(precpred(_ctx, 26))) throw new FailedPredicateException(this, "precpred(_ctx, 26)");
@@ -1020,14 +1305,14 @@ public class MxParser extends Parser {
 						break;
 					case 18:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
+						_localctx = new ExpressionMemberVisitContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(185);
 						if (!(precpred(_ctx, 25))) throw new FailedPredicateException(this, "precpred(_ctx, 25)");
 						setState(186);
 						match(Member);
 						setState(187);
-						((ExpressionContext)_localctx).member = match(Identifier);
+						((ExpressionMemberVisitContext)_localctx).member = match(Identifier);
 						}
 						break;
 					}

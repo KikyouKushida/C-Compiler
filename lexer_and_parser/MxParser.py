@@ -1,4 +1,4 @@
-4# Generated from ./MxParser.g4 by ANTLR 4.13.1
+# Generated from MxParser.g4 by ANTLR 4.13.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -304,12 +304,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitProgram" ):
                 listener.exitProgram(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitProgram" ):
-                return visitor.visitProgram(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -391,12 +385,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitType" ):
                 listener.exitType(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitType" ):
-                return visitor.visitType(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -459,12 +447,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitArrayUnit" ):
                 listener.exitArrayUnit(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitArrayUnit" ):
-                return visitor.visitArrayUnit(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -538,12 +520,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitTypename" ):
                 listener.exitTypename(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitTypename" ):
-                return visitor.visitTypename(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -606,12 +582,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitVariableConstructor" ):
                 listener.exitVariableConstructor(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitVariableConstructor" ):
-                return visitor.visitVariableConstructor(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -690,12 +660,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitVariableDef" ):
                 listener.exitVariableDef(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitVariableDef" ):
-                return visitor.visitVariableDef(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -766,12 +730,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitConstant" ):
                 listener.exitConstant(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitConstant" ):
-                return visitor.visitConstant(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -804,16 +762,22 @@ class MxParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-            self.a = None # ExpressionContext
-            self.op = None # Token
-            self.op1 = None # Token
-            self.b = None # ExpressionContext
-            self.op2 = None # Token
-            self.c = None # ExpressionContext
-            self.member = None # Token
 
-        def LeftParenthesis(self):
-            return self.getToken(MxParser.LeftParenthesis, 0)
+
+        def getRuleIndex(self):
+            return MxParser.RULE_expression
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class ExpressionLogicAndContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
 
         def expression(self, i:int=None):
             if i is None:
@@ -821,28 +785,346 @@ class MxParser ( Parser ):
             else:
                 return self.getTypedRuleContext(MxParser.ExpressionContext,i)
 
+        def LogicAnd(self):
+            return self.getToken(MxParser.LogicAnd, 0)
 
-        def RightParenthesis(self):
-            return self.getToken(MxParser.RightParenthesis, 0)
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionLogicAnd" ):
+                listener.enterExpressionLogicAnd(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionLogicAnd" ):
+                listener.exitExpressionLogicAnd(self)
+
+
+    class ExpressionArrayUnitContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+        def arrayUnit(self):
+            return self.getTypedRuleContext(MxParser.ArrayUnitContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionArrayUnit" ):
+                listener.enterExpressionArrayUnit(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionArrayUnit" ):
+                listener.exitExpressionArrayUnit(self)
+
+
+    class ExpressionAssignContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def Assign(self):
+            return self.getToken(MxParser.Assign, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionAssign" ):
+                listener.enterExpressionAssign(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionAssign" ):
+                listener.exitExpressionAssign(self)
+
+
+    class ExpressionMemberVisitContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.member = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+        def Member(self):
+            return self.getToken(MxParser.Member, 0)
+        def Identifier(self):
+            return self.getToken(MxParser.Identifier, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionMemberVisit" ):
+                listener.enterExpressionMemberVisit(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionMemberVisit" ):
+                listener.exitExpressionMemberVisit(self)
+
+
+    class ExpressionTrinocularContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.a = None # ExpressionContext
+            self.op1 = None # Token
+            self.b = None # ExpressionContext
+            self.op2 = None # Token
+            self.c = None # ExpressionContext
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def QuestionMark(self):
+            return self.getToken(MxParser.QuestionMark, 0)
+        def Colon(self):
+            return self.getToken(MxParser.Colon, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionTrinocular" ):
+                listener.enterExpressionTrinocular(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionTrinocular" ):
+                listener.exitExpressionTrinocular(self)
+
+
+    class ExpressionBitwiseXorContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def BitwiseXor(self):
+            return self.getToken(MxParser.BitwiseXor, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionBitwiseXor" ):
+                listener.enterExpressionBitwiseXor(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionBitwiseXor" ):
+                listener.exitExpressionBitwiseXor(self)
+
+
+    class ExpressionBitwiseShiftContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def BitwiseLeftShift(self):
+            return self.getToken(MxParser.BitwiseLeftShift, 0)
+        def BitwiseRightShift(self):
+            return self.getToken(MxParser.BitwiseRightShift, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionBitwiseShift" ):
+                listener.enterExpressionBitwiseShift(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionBitwiseShift" ):
+                listener.exitExpressionBitwiseShift(self)
+
+
+    class ExpressionBitwiseOrContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def BitwiseOr(self):
+            return self.getToken(MxParser.BitwiseOr, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionBitwiseOr" ):
+                listener.enterExpressionBitwiseOr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionBitwiseOr" ):
+                listener.exitExpressionBitwiseOr(self)
+
+
+    class ExpressionPreSelfDecrementContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def SelfDecrement(self):
+            return self.getToken(MxParser.SelfDecrement, 0)
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionPreSelfDecrement" ):
+                listener.enterExpressionPreSelfDecrement(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionPreSelfDecrement" ):
+                listener.exitExpressionPreSelfDecrement(self)
+
+
+    class ExpressionSufSelfIncrementContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
 
         def SelfIncrement(self):
             return self.getToken(MxParser.SelfIncrement, 0)
 
-        def SelfDecrement(self):
-            return self.getToken(MxParser.SelfDecrement, 0)
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionSufSelfIncrement" ):
+                listener.enterExpressionSufSelfIncrement(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionSufSelfIncrement" ):
+                listener.exitExpressionSufSelfIncrement(self)
+
+
+    class ExpressionLogicNotContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def LogicNot(self):
+            return self.getToken(MxParser.LogicNot, 0)
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionLogicNot" ):
+                listener.enterExpressionLogicNot(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionLogicNot" ):
+                listener.exitExpressionLogicNot(self)
+
+
+    class ExpressionArithmeticOp1Context(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def Multiply(self):
+            return self.getToken(MxParser.Multiply, 0)
+        def Divide(self):
+            return self.getToken(MxParser.Divide, 0)
+        def Mod(self):
+            return self.getToken(MxParser.Mod, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionArithmeticOp1" ):
+                listener.enterExpressionArithmeticOp1(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionArithmeticOp1" ):
+                listener.exitExpressionArithmeticOp1(self)
+
+
+    class ExpressionArithmeticOp2Context(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
 
         def Add(self):
             return self.getToken(MxParser.Add, 0)
-
         def Substract(self):
             return self.getToken(MxParser.Substract, 0)
 
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionArithmeticOp2" ):
+                listener.enterExpressionArithmeticOp2(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionArithmeticOp2" ):
+                listener.exitExpressionArithmeticOp2(self)
+
+
+    class ExpressionAddContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def Add(self):
+            return self.getToken(MxParser.Add, 0)
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionAdd" ):
+                listener.enterExpressionAdd(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionAdd" ):
+                listener.exitExpressionAdd(self)
+
+
+    class ExpressionNewContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
         def New(self):
             return self.getToken(MxParser.New, 0)
-
         def type_(self):
             return self.getTypedRuleContext(MxParser.TypeContext,0)
-
 
         def arrayUnit(self, i:int=None):
             if i is None:
@@ -850,106 +1132,339 @@ class MxParser ( Parser ):
             else:
                 return self.getTypedRuleContext(MxParser.ArrayUnitContext,i)
 
+        def LeftParenthesis(self):
+            return self.getToken(MxParser.LeftParenthesis, 0)
+        def RightParenthesis(self):
+            return self.getToken(MxParser.RightParenthesis, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionNew" ):
+                listener.enterExpressionNew(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionNew" ):
+                listener.exitExpressionNew(self)
+
+
+    class ExpressionCompare1Context(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def Less(self):
+            return self.getToken(MxParser.Less, 0)
+        def Greater(self):
+            return self.getToken(MxParser.Greater, 0)
+        def LessEqual(self):
+            return self.getToken(MxParser.LessEqual, 0)
+        def GreaterEqual(self):
+            return self.getToken(MxParser.GreaterEqual, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionCompare1" ):
+                listener.enterExpressionCompare1(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionCompare1" ):
+                listener.exitExpressionCompare1(self)
+
+
+    class ExpressionCompare2Context(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def Equal(self):
+            return self.getToken(MxParser.Equal, 0)
+        def NotEqual(self):
+            return self.getToken(MxParser.NotEqual, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionCompare2" ):
+                listener.enterExpressionCompare2(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionCompare2" ):
+                listener.exitExpressionCompare2(self)
+
+
+    class ExpressionLogicOrContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def LogicOr(self):
+            return self.getToken(MxParser.LogicOr, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionLogicOr" ):
+                listener.enterExpressionLogicOr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionLogicOr" ):
+                listener.exitExpressionLogicOr(self)
+
+
+    class ExpressionFunctionCallContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+        def LeftParenthesis(self):
+            return self.getToken(MxParser.LeftParenthesis, 0)
+        def RightParenthesis(self):
+            return self.getToken(MxParser.RightParenthesis, 0)
+        def parameterList2(self):
+            return self.getTypedRuleContext(MxParser.ParameterList2Context,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionFunctionCall" ):
+                listener.enterExpressionFunctionCall(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionFunctionCall" ):
+                listener.exitExpressionFunctionCall(self)
+
+
+    class ExpressionBracketContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def LeftParenthesis(self):
+            return self.getToken(MxParser.LeftParenthesis, 0)
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+        def RightParenthesis(self):
+            return self.getToken(MxParser.RightParenthesis, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionBracket" ):
+                listener.enterExpressionBracket(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionBracket" ):
+                listener.exitExpressionBracket(self)
+
+
+    class ExpressionBitwiseAndContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.op = None # Token
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def BitwiseAnd(self):
+            return self.getToken(MxParser.BitwiseAnd, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionBitwiseAnd" ):
+                listener.enterExpressionBitwiseAnd(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionBitwiseAnd" ):
+                listener.exitExpressionBitwiseAnd(self)
+
+
+    class ExpressionCommaContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MxParser.ExpressionContext)
+            else:
+                return self.getTypedRuleContext(MxParser.ExpressionContext,i)
+
+        def Comma(self):
+            return self.getToken(MxParser.Comma, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionComma" ):
+                listener.enterExpressionComma(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionComma" ):
+                listener.exitExpressionComma(self)
+
+
+    class ExpressionBitwiseNotContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def BitwiseNot(self):
+            return self.getToken(MxParser.BitwiseNot, 0)
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionBitwiseNot" ):
+                listener.enterExpressionBitwiseNot(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionBitwiseNot" ):
+                listener.exitExpressionBitwiseNot(self)
+
+
+    class ExpressionIdentifierContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def Identifier(self):
+            return self.getToken(MxParser.Identifier, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionIdentifier" ):
+                listener.enterExpressionIdentifier(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionIdentifier" ):
+                listener.exitExpressionIdentifier(self)
+
+
+    class ExpressionSufSelfDecrementContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+        def SelfDecrement(self):
+            return self.getToken(MxParser.SelfDecrement, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionSufSelfDecrement" ):
+                listener.enterExpressionSufSelfDecrement(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionSufSelfDecrement" ):
+                listener.exitExpressionSufSelfDecrement(self)
+
+
+    class ExpressionConstantContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.value = None # ConstantContext
+            self.copyFrom(ctx)
 
         def constant(self):
             return self.getTypedRuleContext(MxParser.ConstantContext,0)
 
 
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionConstant" ):
+                listener.enterExpressionConstant(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionConstant" ):
+                listener.exitExpressionConstant(self)
+
+
+    class ExpressionSubtractContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def Substract(self):
+            return self.getToken(MxParser.Substract, 0)
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionSubtract" ):
+                listener.enterExpressionSubtract(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionSubtract" ):
+                listener.exitExpressionSubtract(self)
+
+
+    class ExpressionThisContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
         def This(self):
             return self.getToken(MxParser.This, 0)
 
-        def Identifier(self):
-            return self.getToken(MxParser.Identifier, 0)
-
-        def BitwiseNot(self):
-            return self.getToken(MxParser.BitwiseNot, 0)
-
-        def LogicNot(self):
-            return self.getToken(MxParser.LogicNot, 0)
-
-        def Multiply(self):
-            return self.getToken(MxParser.Multiply, 0)
-
-        def Divide(self):
-            return self.getToken(MxParser.Divide, 0)
-
-        def Mod(self):
-            return self.getToken(MxParser.Mod, 0)
-
-        def BitwiseLeftShift(self):
-            return self.getToken(MxParser.BitwiseLeftShift, 0)
-
-        def BitwiseRightShift(self):
-            return self.getToken(MxParser.BitwiseRightShift, 0)
-
-        def Less(self):
-            return self.getToken(MxParser.Less, 0)
-
-        def Greater(self):
-            return self.getToken(MxParser.Greater, 0)
-
-        def LessEqual(self):
-            return self.getToken(MxParser.LessEqual, 0)
-
-        def GreaterEqual(self):
-            return self.getToken(MxParser.GreaterEqual, 0)
-
-        def Equal(self):
-            return self.getToken(MxParser.Equal, 0)
-
-        def NotEqual(self):
-            return self.getToken(MxParser.NotEqual, 0)
-
-        def BitwiseAnd(self):
-            return self.getToken(MxParser.BitwiseAnd, 0)
-
-        def BitwiseXor(self):
-            return self.getToken(MxParser.BitwiseXor, 0)
-
-        def BitwiseOr(self):
-            return self.getToken(MxParser.BitwiseOr, 0)
-
-        def LogicAnd(self):
-            return self.getToken(MxParser.LogicAnd, 0)
-
-        def LogicOr(self):
-            return self.getToken(MxParser.LogicOr, 0)
-
-        def QuestionMark(self):
-            return self.getToken(MxParser.QuestionMark, 0)
-
-        def Colon(self):
-            return self.getToken(MxParser.Colon, 0)
-
-        def Assign(self):
-            return self.getToken(MxParser.Assign, 0)
-
-        def Comma(self):
-            return self.getToken(MxParser.Comma, 0)
-
-        def parameterList2(self):
-            return self.getTypedRuleContext(MxParser.ParameterList2Context,0)
-
-
-        def Member(self):
-            return self.getToken(MxParser.Member, 0)
-
-        def getRuleIndex(self):
-            return MxParser.RULE_expression
-
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterExpression" ):
-                listener.enterExpression(self)
+            if hasattr( listener, "enterExpressionThis" ):
+                listener.enterExpressionThis(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitExpression" ):
-                listener.exitExpression(self)
+            if hasattr( listener, "exitExpressionThis" ):
+                listener.exitExpressionThis(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitExpression" ):
-                return visitor.visitExpression(self)
-            else:
-                return visitor.visitChildren(self)
+
+    class ExpressionPreSelfIncrementContext(ExpressionContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MxParser.ExpressionContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def SelfIncrement(self):
+            return self.getToken(MxParser.SelfIncrement, 0)
+        def expression(self):
+            return self.getTypedRuleContext(MxParser.ExpressionContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExpressionPreSelfIncrement" ):
+                listener.enterExpressionPreSelfIncrement(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExpressionPreSelfIncrement" ):
+                listener.exitExpressionPreSelfIncrement(self)
 
 
 
@@ -967,6 +1482,10 @@ class MxParser ( Parser ):
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [40]:
+                localctx = MxParser.ExpressionBracketContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+
                 self.state = 98
                 self.match(MxParser.LeftParenthesis)
                 self.state = 99
@@ -975,30 +1494,45 @@ class MxParser ( Parser ):
                 self.match(MxParser.RightParenthesis)
                 pass
             elif token in [37]:
+                localctx = MxParser.ExpressionPreSelfIncrementContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 102
                 self.match(MxParser.SelfIncrement)
                 self.state = 103
                 self.expression(23)
                 pass
             elif token in [38]:
+                localctx = MxParser.ExpressionPreSelfDecrementContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 104
                 self.match(MxParser.SelfDecrement)
                 self.state = 105
                 self.expression(22)
                 pass
             elif token in [45]:
+                localctx = MxParser.ExpressionAddContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 106
                 self.match(MxParser.Add)
                 self.state = 107
                 self.expression(21)
                 pass
             elif token in [46]:
+                localctx = MxParser.ExpressionSubtractContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 108
                 self.match(MxParser.Substract)
                 self.state = 109
                 self.expression(20)
                 pass
             elif token in [5]:
+                localctx = MxParser.ExpressionNewContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 110
                 self.match(MxParser.New)
                 self.state = 111
@@ -1026,24 +1560,39 @@ class MxParser ( Parser ):
 
                 pass
             elif token in [8, 9, 10, 20, 56]:
+                localctx = MxParser.ExpressionConstantContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 122
-                self.constant()
+                localctx.value = self.constant()
                 pass
             elif token in [7]:
+                localctx = MxParser.ExpressionThisContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 123
                 self.match(MxParser.This)
                 pass
             elif token in [19]:
+                localctx = MxParser.ExpressionIdentifierContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 124
                 self.match(MxParser.Identifier)
                 pass
             elif token in [30]:
+                localctx = MxParser.ExpressionBitwiseNotContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 125
                 self.match(MxParser.BitwiseNot)
                 self.state = 126
                 self.expression(15)
                 pass
             elif token in [35]:
+                localctx = MxParser.ExpressionLogicNotContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 127
                 self.match(MxParser.LogicNot)
                 self.state = 128
@@ -1065,7 +1614,7 @@ class MxParser ( Parser ):
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,12,self._ctx)
                     if la_ == 1:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionArithmeticOp1Context(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 131
                         if not self.precpred(self._ctx, 13):
@@ -1084,7 +1633,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 2:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionArithmeticOp2Context(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 134
                         if not self.precpred(self._ctx, 12):
@@ -1103,7 +1652,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 3:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionBitwiseShiftContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 137
                         if not self.precpred(self._ctx, 11):
@@ -1122,7 +1671,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 4:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionCompare1Context(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 140
                         if not self.precpred(self._ctx, 10):
@@ -1141,7 +1690,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 5:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionCompare2Context(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 143
                         if not self.precpred(self._ctx, 9):
@@ -1160,7 +1709,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 6:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionBitwiseAndContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 146
                         if not self.precpred(self._ctx, 8):
@@ -1173,7 +1722,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 7:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionBitwiseXorContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 149
                         if not self.precpred(self._ctx, 7):
@@ -1186,7 +1735,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 8:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionBitwiseOrContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 152
                         if not self.precpred(self._ctx, 6):
@@ -1199,7 +1748,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 9:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionLogicAndContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 155
                         if not self.precpred(self._ctx, 5):
@@ -1212,7 +1761,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 10:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionLogicOrContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 158
                         if not self.precpred(self._ctx, 4):
@@ -1225,7 +1774,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 11:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionTrinocularContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         localctx.a = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 161
@@ -1243,7 +1792,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 12:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionAssignContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 167
                         if not self.precpred(self._ctx, 2):
@@ -1256,7 +1805,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 13:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionCommaContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 170
                         if not self.precpred(self._ctx, 1):
@@ -1269,7 +1818,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 14:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionFunctionCallContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 173
                         if not self.precpred(self._ctx, 29):
@@ -1290,7 +1839,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 15:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionArrayUnitContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 179
                         if not self.precpred(self._ctx, 28):
@@ -1301,7 +1850,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 16:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionSufSelfIncrementContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 181
                         if not self.precpred(self._ctx, 27):
@@ -1312,7 +1861,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 17:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionSufSelfDecrementContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 183
                         if not self.precpred(self._ctx, 26):
@@ -1323,7 +1872,7 @@ class MxParser ( Parser ):
                         pass
 
                     elif la_ == 18:
-                        localctx = MxParser.ExpressionContext(self, _parentctx, _parentState)
+                        localctx = MxParser.ExpressionMemberVisitContext(self, MxParser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
                         self.state = 185
                         if not self.precpred(self._ctx, 25):
@@ -1406,12 +1955,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitStatement" ):
                 listener.exitStatement(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitStatement" ):
-                return visitor.visitStatement(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1515,12 +2058,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitEmptyStatement" ):
                 listener.exitEmptyStatement(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitEmptyStatement" ):
-                return visitor.visitEmptyStatement(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1571,12 +2108,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitBlockStatement" ):
                 listener.exitBlockStatement(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitBlockStatement" ):
-                return visitor.visitBlockStatement(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1635,12 +2166,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitContinueStatement" ):
                 listener.exitContinueStatement(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitContinueStatement" ):
-                return visitor.visitContinueStatement(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1686,12 +2211,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitBreakStatement" ):
                 listener.exitBreakStatement(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitBreakStatement" ):
-                return visitor.visitBreakStatement(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1742,12 +2261,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitReturnStatement" ):
                 listener.exitReturnStatement(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitReturnStatement" ):
-                return visitor.visitReturnStatement(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1816,12 +2329,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitWhileStatement" ):
                 listener.exitWhileStatement(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitWhileStatement" ):
-                return visitor.visitWhileStatement(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -1875,12 +2382,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitElseStatement" ):
                 listener.exitElseStatement(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitElseStatement" ):
-                return visitor.visitElseStatement(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -1943,12 +2444,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitIfStatement" ):
                 listener.exitIfStatement(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitIfStatement" ):
-                return visitor.visitIfStatement(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -2034,12 +2529,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitForStatement" ):
                 listener.exitForStatement(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitForStatement" ):
-                return visitor.visitForStatement(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -2118,12 +2607,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitExpressionStatement" ):
                 listener.exitExpressionStatement(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitExpressionStatement" ):
-                return visitor.visitExpressionStatement(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -2183,12 +2666,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitParameterList1" ):
                 listener.exitParameterList1(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitParameterList1" ):
-                return visitor.visitParameterList1(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -2257,12 +2734,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitParameterList2" ):
                 listener.exitParameterList2(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitParameterList2" ):
-                return visitor.visitParameterList2(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -2337,12 +2808,6 @@ class MxParser ( Parser ):
             if hasattr( listener, "exitFunctionDef" ):
                 listener.exitFunctionDef(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitFunctionDef" ):
-                return visitor.visitFunctionDef(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -2411,12 +2876,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitClassConstructor" ):
                 listener.exitClassConstructor(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitClassConstructor" ):
-                return visitor.visitClassConstructor(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -2498,12 +2957,6 @@ class MxParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitClassDef" ):
                 listener.exitClassDef(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitClassDef" ):
-                return visitor.visitClassDef(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
