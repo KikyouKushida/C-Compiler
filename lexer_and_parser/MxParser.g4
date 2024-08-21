@@ -6,15 +6,15 @@ options {
 program: (variableDef | classDef | functionDef)* EOF;
 
 type: Int | Bool | String | Void | Identifier;
-arrayUnit: ('[' expression? ']')+;
+arrayUnit: LeftBracket expression? RightBracket;
 typename: type arrayUnit*;
 
-variableConstructor: New? name = Identifier ('=' expression)?;
-variableDef: typename variableConstructor (',' variableConstructor)* ';';
+variableConstructor: name = Identifier (Assign expression)?;
+variableDef: typename variableConstructor (Comma variableConstructor)* Semicolon;
 constant: Integer | Cstring | True_ | False_ | Null;
 
 expression:
-  expression '(' parameterList2? ')'                  #expressionFunctionCall
+  expression LeftParenthesis parameterList2? RightParenthesis                 #expressionFunctionCall
   | expression arrayUnit                              #expressionArrayUnit
   | expression SelfIncrement                          #expressionSufSelfIncrement
   | expression SelfDecrement                          #expressionSufSelfDecrement
@@ -24,7 +24,7 @@ expression:
   | SelfDecrement expression                          #expressionPreSelfDecrement
   | Add expression                                    #expressionAdd
   | Substract expression                              #expressionSubtract
-  | New type arrayUnit* ('(' ')')?                    #expressionNew
+  | New type arrayUnit* (LeftParenthesis RightParenthesis)?                    #expressionNew
   | value = constant                                  #expressionConstant
   | This                                               #expressionThis
   | Identifier                                        #expressionIdentifier
@@ -60,30 +60,30 @@ statement:
   | variableDef ;
 
 
-emptyStatement: ';';
-blockStatement: '{' statement* '}';
-continueStatement: Continue ';';
-breakStatement: Break ';';
-returnStatement: Return (expression)? ';';
-whileStatement: While '(' expression ')' Body = statement;
+emptyStatement: Semicolon;
+blockStatement: LeftBrace statement* RightBrace;
+continueStatement: Continue Semicolon;
+breakStatement: Break Semicolon;
+returnStatement: Return (expression)? Semicolon;
+whileStatement: While LeftParenthesis expression RightParenthesis Body = statement;
 elseStatement: Else Body = statement;
-ifStatement: If '(' expression ')' Body = statement (elseStatement)?;
-forStatement: For '(' Initialization = statement? Condition = expression? ';' Step = expression? ')' Body = statement;
-expressionStatement: expression ';';
+ifStatement: If LeftParenthesis expression RightParenthesis Body = statement (elseStatement)?;
+forStatement: For LeftParenthesis Initialization = statement? Condition = expression? Semicolon Step = expression? RightParenthesis Body = statement;
+expressionStatement: expression Semicolon;
 
 
-parameterList1: typename variableConstructor (',' typename variableConstructor)*;
-parameterList2: expression (',' expression)*;
+parameterList1: typename variableConstructor (Comma typename variableConstructor)*;
+parameterList2: expression (Comma expression)*;
 functionDef:
-  typename name = Identifier '(' parameterList1? ')' blockStatement;
+  typename name = Identifier LeftParenthesis parameterList1? RightParenthesis blockStatement;
 
-classConstructor: name = Identifier '(' ')' blockStatement;
+classConstructor: name = Identifier LeftParenthesis RightParenthesis blockStatement;
 classDef: 
-  Class name = Identifier '{'
+  Class name = Identifier LeftBrace
     (
       variableDef
       | functionDef
       | classConstructor
     )*
   
-  '}' ';';
+  RightBrace Semicolon;

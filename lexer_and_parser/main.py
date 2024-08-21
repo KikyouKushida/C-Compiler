@@ -14,3 +14,9 @@ def main(input_stream):
 if __name__ == '__main__':
     input_stream = FileStream('input.mx')
     main(input_stream)
+
+
+# def visitBinary(self, ctx):
+#     lhs = self.visit(ctx.lhs)
+#     rhs = self.visit(ctx.rhs)
+    
