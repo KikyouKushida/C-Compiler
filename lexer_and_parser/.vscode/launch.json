@@ -8,7 +8,7 @@
                "name": "Debug ANTLR4 grammar", 
                "type": "antlr-debug", 
                "request": "launch", 
-               "input": "./test.g4", // 输入文件（即你要运行的 Python 代码文件） 
+               "input": "./input.mx", // 输入文件（即你要运行的 Python 代码文件） 
                "grammar": "./MxParser.g4", // 语法文件
                "startRule": "program", // 语法入口规则，我们的公式语法入口规则是 file_input
                "printParseTree": true, // 是否 打印/可视化 parse tree 

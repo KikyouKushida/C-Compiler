@@ -7,10 +7,8 @@ class A{
 
 string str;
 
-
-
 int main(){
   int a = 1, b = 1;
-  printlnInt(a + b);
+  c.f(x);
   return 0;
 }

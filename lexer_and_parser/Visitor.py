@@ -57,6 +57,19 @@ def Error_function_lack_returnStatement(name):
 
 def Error_name_of_functionCall_not_a_function(name):
     print(f"attempt to call {name}, which is not a function at all")
+    sys.exit(1)
+
+def Error_parameterList_of_functionCall_wrong(name):
+    print(f"Call of function {name} has a wrong parameterList")
+    sys.exit(1)
+
+def Error_invalid_member_visit(string):
+    print(f"Such member visit {string} is invalid")
+    sys.exit(1)
+
+def Error_invalid_array_unit(string):
+    print(f"Such array unit {string} is invalid")
+    sys.exit(1)
 
 
 from enum import Enum
@@ -78,7 +91,9 @@ class typeInformation():
         self.dimension = 0
         self.arraySize = []
         self.value = None
-        self.objectName = None
+        self.opType = None
+        self.objectInfo = None
+        self.functionInfo = None
     
 
 class objectInformation():
@@ -127,10 +142,10 @@ class My_MxParserVisitor(MxParserVisitor):
         return tempScopeInformation
 
     def translate_MxParser_basictype(self, type: MxParser.TypeContext):
-        if isinstance(type, MxParser.Int): return ExpressionType.Int
-        elif isinstance(type, MxParser.Bool): return ExpressionType.Bool
-        elif isinstance(type, MxParser.Cstring): return ExpressionType.Cstring
-        elif isinstance(type, MxParser.Void): return ExpressionType.Void
+        if type.Int() != None: return ExpressionType.Int
+        elif type.Bool() != None: return ExpressionType.Bool
+        elif type.String() != None: return ExpressionType.Cstring
+        elif type.Void() != None: return ExpressionType.Void
         else: return ExpressionType.Object
 
     def translate_typename(self, typeName: MxParser.TypenameContext):
@@ -172,7 +187,7 @@ class My_MxParserVisitor(MxParserVisitor):
             Error_multiple_definitions(name)
             return False
         while current_scope != -1:
-            tempScopeInformation = scopeInformation[current_scope]
+            tempScopeInformation = scopeInformationStore[current_scope]
             if tempScopeInformation.object.get(name) != None:
                 Error_multiple_definitions(name)
                 return False
@@ -218,7 +233,7 @@ class My_MxParserVisitor(MxParserVisitor):
 
     def visitClassDef(self, ctx: MxParser.ClassDefContext):
         class_name = ctx.Identifier().getText()
-        self.check_multiple_identifier(class_name)
+        self.check_multiple_identifier(self.current_scope, class_name)
         tempClassInformation = classInformation()
         tempClassInformation.name = class_name
         self.current_class = class_name
@@ -241,9 +256,10 @@ class My_MxParserVisitor(MxParserVisitor):
         tempFunctionInformation = functionInformation()
         tempFunctionInformation.name = function_name
         tempFunctionInformation.returnType = self.translate_typename(type_name)
-        paralen = len(ctx.parameterList1().variableConstructor())
+        paralen = 0
+        if ctx.parameterList1() != None: paralen = len(ctx.parameterList1().variableConstructor())
         print(f"Length of parameterList is {paralen}.")
-        for i in range(0, len):
+        for i in range(0, paralen):
             # self.check_no_new_in_parameterList1(ctx.parameterList1().variableConstructor()[i])
             self.check_no_assign_in_parameterList1(ctx.parameterList1().variableConstructor()[i])
             tempFunctionInformation.parameterListType.append(ctx.parameterList1().typename()[i])
@@ -332,10 +348,14 @@ class My_MxParserVisitor(MxParserVisitor):
         return tempTypeInformation
 
     def visitExpressionArrayUnit(self, ctx:MxParser.ExpressionArrayUnitContext):
-
+        lhs = self.visit(ctx.expression(0))
+        if lhs.optype != ExpressionType.Object:
+            Error_invalid_array_unit(ctx.getText())
+        
         return self.visitChildren(ctx)
 
     def visitExpressionAssign(self, ctx:MxParser.ExpressionAssignContext):
+        print(f"Visit Expression Assign")
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != rhs.type or lhs.dimension != rhs.dimension:
@@ -346,8 +366,36 @@ class My_MxParserVisitor(MxParserVisitor):
         return rhs
 
     def visitExpressionMemberVisit(self, ctx:MxParser.ExpressionMemberVisitContext):
-
-        return self.visitChildren(ctx)
+        lhs = self.visit(ctx.expression())
+        rhs = ctx.Identifier()
+        if lhs.opType != ExpressionType.Object:
+            Error_invalid_member_visit(ctx.getText())
+        tempObjectInformation = objectInformation()
+        tempTypeInformation = typeInformation()
+        class_name = None
+        current_scope = self.current_scope
+        while current_scope != -1:
+            tempScopeInformation = scopeInformation[current_scope]
+            if tempScopeInformation.object.get(lhs.objectInfo.name) != None:
+                tempObjectInformation = tempScopeInformation.object[lhs.objectInfo.name]
+                class_name = tempObjectInformation.type
+                break
+            current_scope = tempScopeInformation.fa
+        if class_name == None:
+            Error_invalid_member_visit(ctx.getText())
+        tempClassInformation = classInformation()
+        tempClassInformation = class_name_set[class_name]
+    
+        if tempClassInformation.function.get(rhs.getText()) != None:
+            tempTypeInformation.optype = ExpressionType.Function
+            tempTypeInformation.functionInfo = tempClassInformation.function.get(rhs.value)
+            return tempTypeInformation
+        elif tempClassInformation.object.get(rhs.getText()) != None:
+            tempTypeInformation.optype = ExpressionType.Object
+            tempTypeInformation.objectInfo = tempClassInformation.function.get(rhs.value)
+            return tempTypeInformation
+        Error_invalid_member_visit(ctx.getText())
+        return 
 
     def visitExpressionTrinocular(self, ctx:MxParser.ExpressionTrinocularContext):
         return self.visitChildren(ctx)
@@ -367,6 +415,18 @@ class My_MxParserVisitor(MxParserVisitor):
         return tempTypeInformation
 
     def visitExpressionBitwiseShift(self, ctx:MxParser.ExpressionBitwiseShiftContext):
+        lhs = self.visit(ctx.expression(0))
+        rhs = self.visit(ctx.expression(1))
+        if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int or lhs.dimension != 0 or rhs.dimension != 0:
+            Error_expression_type_dismatch(ctx.getText())
+        
+        tempTypeInformation = typeInformation()
+        tempTypeInformation.type = ExpressionType.Bool
+        tempTypeInformation.arraySize = [1]
+        tempTypeInformation.dimension = 1
+        tempTypeInformation.value = lhs.value ^ rhs.value
+
+        return tempTypeInformation
         return self.visitChildren(ctx)
 
     def visitExpressionBitwiseOr(self, ctx:MxParser.ExpressionBitwiseOrContext):
@@ -477,7 +537,8 @@ class My_MxParserVisitor(MxParserVisitor):
         # to be continued
         function_ = self.visit(ctx.expression())
         if function_.type != ExpressionType.Function:
-            Error_
+            Error_name_of_functionCall_not_a_function(ctx.exception().getText())
+        
         return None
 
     def visitExpressionBracket(self, ctx:MxParser.ExpressionBracketContext):
@@ -497,8 +558,8 @@ class My_MxParserVisitor(MxParserVisitor):
 
         return tempTypeInformation
 
-    def visitExpressionComma(self, ctx:MxParser.ExpressionCommaContext):
-        return self.visitChildren(ctx)
+    # def visitExpressionComma(self, ctx:MxParser.ExpressionCommaContext):
+    #     return self.visitChildren(ctx)
     
     def visitExpressionBitwiseNot(self, ctx:MxParser.ExpressionBitwiseNotContext):
         host = self.visit(ctx.expression())
@@ -511,14 +572,26 @@ class My_MxParserVisitor(MxParserVisitor):
         name = ctx.Identifier().getText()
         current_scope = self.current_scope
         while current_scope != -1:
-            tempScopeInformation = scopeInformation[current_scope]
+            tempScopeInformation = scopeInformationStore[current_scope]
             if tempScopeInformation.object.get(name) != None:
                 tempObjectInformation = tempScopeInformation.object[name]
                 tempTypeInformation.type = tempObjectInformation.type
+                tempTypeInformation.opType = ExpressionType.Object
+                tempTypeInformation.objectInfo = tempObjectInformation
                 return tempTypeInformation
             current_scope = tempScopeInformation.fa 
-        tempTypeInformation.type = ExpressionType.Unknown
-        # In this case, the identifier's type may be member function of member variable of a Class.
+        if function_name_set.get(name) != None:
+            tempTypeInformation.opType = ExpressionType.Function
+            tempTypeInformation.type = ExpressionType.Function
+            tempTypeInformation.functionInfo = function_name_set.get(name)
+            return tempTypeInformation
+        elif Default_functions.get(name) != None:
+            tempTypeInformation.opType = ExpressionType.Function
+            tempTypeInformation.type = ExpressionType.Function
+            tempTypeInformation.functionInfo = Default_functions.get(name)
+            return tempTypeInformation
+        # ???
+        Error_unknown_identifier(ctx.Identifier().getText())
         return tempTypeInformation
 
     def visitExpressionSufSelfDecrement(self, ctx:MxParser.ExpressionSufSelfDecrementContext):
@@ -529,9 +602,11 @@ class My_MxParserVisitor(MxParserVisitor):
 
     def visitExpressionConstant(self, ctx:MxParser.ExpressionConstantContext):
         tempTypeInformation = typeInformation()
-        if isinstance(ctx, MxParser.Integer): tempTypeInformation.type = ExpressionType.Int
-        elif isinstance(ctx, MxParser.True_) or isinstance(ctx, MxParser.False_): tempTypeInformation.type = ExpressionType.Bool
-        elif isinstance(ctx, MxParser.Null): tempTypeInformation.type = ExpressionType.Reference
+        constant_value = ctx.constant()
+        if constant_value.Integer() != None: tempTypeInformation.type = ExpressionType.Int
+        elif constant_value.Cstring() != None: tempTypeInformation.type = ExpressionType.Cstring
+        elif constant_value.True_() != None or constant_value.False_() != None: tempTypeInformation.type = ExpressionType.Bool
+        elif constant_value.Null() != None: tempTypeInformation.type = ExpressionType.Reference
         return tempTypeInformation
 
     def visitExpressionSubtract(self, ctx:MxParser.ExpressionSubtractContext):
@@ -550,5 +625,11 @@ class My_MxParserVisitor(MxParserVisitor):
         if host.type != ExpressionType.Int or host.dimension != 0:
             Error_expression_type_dismatch(ctx.getText())
         return host
+
+    def visitBlockStatement(self, ctx:MxParser.BlockStatementContext):
+        self.create_new_scope()
+        for child in ctx.getChildren():
+            self.visit(child)
+        return 
 
       

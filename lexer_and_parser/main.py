@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from antlr4 import *
 from MxLexer import MxLexer
 from MxParser import MxParser
@@ -19,4 +21,7 @@ if __name__ == '__main__':
 # def visitBinary(self, ctx):
 #     lhs = self.visit(ctx.lhs)
 #     rhs = self.visit(ctx.rhs)
+
+
+
     

@@ -149,11 +149,6 @@ class MxParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MxParser#expressionComma.
-    def visitExpressionComma(self, ctx:MxParser.ExpressionCommaContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MxParser#expressionBitwiseNot.
     def visitExpressionBitwiseNot(self, ctx:MxParser.ExpressionBitwiseNotContext):
         return self.visitChildren(ctx)

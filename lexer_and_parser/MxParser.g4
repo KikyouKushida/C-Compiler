@@ -42,7 +42,7 @@ expression:
   | expression op = LogicOr expression                #expressionLogicOr
   | <assoc = right> a = expression op1 = QuestionMark b = expression op2 = Colon c = expression #expressionTrinocular
   | <assoc = right> expression Assign expression      #expressionAssign
-  | expression Comma expression                       #expressionComma
+//   | expression Comma expression                       #expressionComma
   ;
 
 

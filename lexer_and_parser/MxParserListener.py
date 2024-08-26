@@ -260,15 +260,6 @@ class MxParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MxParser#expressionComma.
-    def enterExpressionComma(self, ctx:MxParser.ExpressionCommaContext):
-        pass
-
-    # Exit a parse tree produced by MxParser#expressionComma.
-    def exitExpressionComma(self, ctx:MxParser.ExpressionCommaContext):
-        pass
-
-
     # Enter a parse tree produced by MxParser#expressionBitwiseNot.
     def enterExpressionBitwiseNot(self, ctx:MxParser.ExpressionBitwiseNotContext):
         pass
