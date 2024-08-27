@@ -71,6 +71,19 @@ def Error_invalid_array_unit(string):
     print(f"Such array unit {string} is invalid")
     sys.exit(1)
 
+def Error_trinocular_type_invalid(string):
+    print(f"Invalid operator type detected in trinocular expression {string}")
+    sys.exit(1)
+
+
+def Error_dimension_dismatch_in_arrayUnit(expectedDimension, actualDimension, string):
+    print(f"Dimension dismatch in {string}, expected {expectedDimension}, got {actualDimension}")
+    sys.exit(1)
+
+def Error_wrong_expression_type(string):
+    print(f"Wrong expression type detected in expression {string}")
+    sys.exit(1)
+
 
 from enum import Enum
 
@@ -94,6 +107,7 @@ class typeInformation():
         self.opType = None
         self.objectInfo = None
         self.functionInfo = None
+        self.objectName = None
     
 
 class objectInformation():
@@ -285,12 +299,12 @@ class My_MxParserVisitor(MxParserVisitor):
             Error_function_main_count_is_not_one(self.function_main_count)
         self.priority -= 1
         for function in function_name_set:
-            if function.haveReturnStatement == False:
-                Error_function_lack_returnStatement(function.name)
+            if function_name_set[function].haveReturnStatement == False and function_name_set[function].returnType.type != ExpressionType.Void and function != "main":
+                Error_function_lack_returnStatement(function)
         for Class in class_name_set:
-            for function in Class.function:
-                if function.haveReturnStatement == False:
-                    Error_function_lack_returnStatement(function.name)
+            for function in class_name_set[Class].function:
+                if class_name_set[Class].function[function].haveReturnStatement == False and class_name_set[Class].function[function].returnType.type != ExpressionType.Void:
+                    Error_function_lack_returnStatement(function)
         print(f"ok check passed.")
         sys.exit(0)
 
@@ -311,8 +325,10 @@ class My_MxParserVisitor(MxParserVisitor):
         type_name = ctx.typename()
         self.check_multiple_identifier(self.current_scope, function_name)
         self.check_valid_typename(type_name)
-        self.current_function = function_name
+        self.current_function = function_name.getText()
         print()
+        if function_name.getText() == "main":
+            self.Update_function_main_count()
         if self.current_class == None:
             print(f"Global Function Definition: {function_name.getText()}")
         else:
@@ -320,6 +336,7 @@ class My_MxParserVisitor(MxParserVisitor):
         tempFunctionInformation = functionInformation()
         tempFunctionInformation.name = function_name.getText()
         tempFunctionInformation.returnType = self.translate_typename(type_name)
+        print(f"returnType = {tempFunctionInformation.returnType.type}, dimension = {tempFunctionInformation.returnType.dimension}")
         paralen = 0
         if ctx.parameterList1() != None: paralen = len(ctx.parameterList1().variableConstructor())
         print(f"Length of parameterList is {paralen}.")
@@ -413,18 +430,27 @@ class My_MxParserVisitor(MxParserVisitor):
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
-        tempTypeInformation.arraySize = [1]
-        tempTypeInformation.dimension = 1
+        tempTypeInformation.arraySize = []
+        tempTypeInformation.dimension = 0
         tempTypeInformation.value = lhs.value and rhs.value
 
         return tempTypeInformation
 
     def visitExpressionArrayUnit(self, ctx:MxParser.ExpressionArrayUnitContext):
-        lhs = self.visit(ctx.expression(0))
-        if lhs.optype != ExpressionType.Object:
+        lhs = self.visit(ctx.expression())
+        if lhs.opType != ExpressionType.Object:
             Error_invalid_array_unit(ctx.getText())
-        
-        return self.visitChildren(ctx)
+        dimension = len(ctx.arrayUnit())
+        if lhs.dimension != dimension:
+            Error_dimension_dismatch_in_arrayUnit(lhs.type.dimension, dimension, ctx.getText())
+        for i in range(dimension):
+            temp = self.visit(ctx.arrayUnit(i).expression())
+            if temp.type != ExpressionType.Int or temp.dimension != 0:
+                Error_wrong_expression_type(ctx.arrayUnit(i).expression())
+        tempTypeInformation = typeInformation()
+        tempTypeInformation.dimension = 0
+        tempTypeInformation.type = lhs.type
+        return tempTypeInformation
 
     def visitExpressionAssign(self, ctx:MxParser.ExpressionAssignContext):
         print(f"Visit Expression Assign")
@@ -450,8 +476,8 @@ class My_MxParserVisitor(MxParserVisitor):
         current_scope = self.current_scope
         while current_scope != 0:
             tempScopeInformation = scopeInformationStore[current_scope]
-            if tempScopeInformation.object.get(lhs.objectInfo.name) != None:
-                tempObjectInformation = tempScopeInformation.object[lhs.objectInfo.name]
+            if tempScopeInformation.object.get(lhs.objectName) != None:
+                tempObjectInformation = tempScopeInformation.object[lhs.objectName]
                 class_name = tempObjectInformation.type.type
                 break
             current_scope = tempScopeInformation.fa
@@ -469,16 +495,21 @@ class My_MxParserVisitor(MxParserVisitor):
             tempTypeInformation.functionInfo = tempClassInformation.function.get(rhs.getText())
             return tempTypeInformation
         elif tempClassInformation.object.get(rhs.getText()) != None:
-            tempTypeInformation.optype = ExpressionType.Object
-            # tempTypeInformation.objectInfo = tempClassInformation.object.get(rhs.getText())
-            # tempTypeInformation.type = tempTypeInformation.objectInfo.type
             tempTypeInformation = tempClassInformation.object.get(rhs.getText()).type
+            tempTypeInformation.optype = ExpressionType.Object
+            tempTypeInformation.objectName = rhs.getText()
             return tempTypeInformation
         Error_invalid_member_visit(ctx.getText())
         return 
 
     def visitExpressionTrinocular(self, ctx:MxParser.ExpressionTrinocularContext):
-        return self.visitChildren(ctx)
+        a = self.visit(ctx.expression(0))
+        b = self.visit(ctx.expression(1))
+        c = self.visit(ctx.expression(2))
+        if a.type != bool or a.dimension != 0 or b.type != c.type or b.dimension != c.dimension:
+            Error_trinocular_type_invalid(ctx.getText())
+        # returnType equals b's type
+        return b
 
     def visitExpressionBitwiseXor(self, ctx:MxParser.ExpressionBitwiseXorContext):
         lhs = self.visit(ctx.expression(0))
@@ -488,8 +519,8 @@ class My_MxParserVisitor(MxParserVisitor):
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
-        tempTypeInformation.arraySize = [1]
-        tempTypeInformation.dimension = 1
+        tempTypeInformation.arraySize = []
+        tempTypeInformation.dimension = 0
         tempTypeInformation.value = lhs.value ^ rhs.value
 
         return tempTypeInformation
@@ -502,8 +533,8 @@ class My_MxParserVisitor(MxParserVisitor):
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
-        tempTypeInformation.arraySize = [1]
-        tempTypeInformation.dimension = 1
+        tempTypeInformation.arraySize = []
+        tempTypeInformation.dimension = 0
         tempTypeInformation.value = lhs.value ^ rhs.value
 
         return tempTypeInformation
@@ -516,8 +547,8 @@ class My_MxParserVisitor(MxParserVisitor):
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
-        tempTypeInformation.arraySize = [1]
-        tempTypeInformation.dimension = 1
+        tempTypeInformation.arraySize = []
+        tempTypeInformation.dimension = 0
         tempTypeInformation.value = lhs.value or rhs.value
 
         return tempTypeInformation
@@ -548,8 +579,8 @@ class My_MxParserVisitor(MxParserVisitor):
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Int
-        tempTypeInformation.arraySize = [1]
-        tempTypeInformation.dimension = 1
+        tempTypeInformation.arraySize = []
+        tempTypeInformation.dimension = 0
 
         return tempTypeInformation
 
@@ -561,8 +592,8 @@ class My_MxParserVisitor(MxParserVisitor):
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Int
-        tempTypeInformation.arraySize = [1]
-        tempTypeInformation.dimension = 1
+        tempTypeInformation.arraySize = []
+        tempTypeInformation.dimension = 0
 
         return tempTypeInformation
 
@@ -573,6 +604,7 @@ class My_MxParserVisitor(MxParserVisitor):
         return host
 
     def visitExpressionNew(self, ctx:MxParser.ExpressionNewContext):
+
         return self.visitChildren(ctx)
 
     def visitExpressionCompare1(self, ctx:MxParser.ExpressionCompare1Context):
@@ -631,8 +663,8 @@ class My_MxParserVisitor(MxParserVisitor):
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Int
-        tempTypeInformation.arraySize = [1]
-        tempTypeInformation.dimension = 1
+        tempTypeInformation.arraySize = []
+        tempTypeInformation.dimension = 0
         tempTypeInformation.value = lhs.value and rhs.value
 
         return tempTypeInformation
@@ -657,9 +689,8 @@ class My_MxParserVisitor(MxParserVisitor):
             if tempScopeInformation.object.get(name) != None:
                 tempObjectInformation = tempScopeInformation.object[name]
                 tempTypeInformation = tempObjectInformation.type
-                # tempTypeInformation.type = tempObjectInformation.type
                 tempTypeInformation.opType = ExpressionType.Object
-                # tempTypeInformation.objectInfo = tempObjectInformation
+                tempTypeInformation.objectName = name
                 return tempTypeInformation
             current_scope = tempScopeInformation.fa 
         if function_name_set.get(name) != None:

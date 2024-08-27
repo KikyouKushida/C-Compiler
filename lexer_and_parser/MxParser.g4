@@ -15,7 +15,7 @@ constant: Integer | Cstring | True_ | False_ | Null;
 
 expression:
   expression LeftParenthesis parameterList2? RightParenthesis                 #expressionFunctionCall
-  | expression arrayUnit                              #expressionArrayUnit
+  | expression arrayUnit+                              #expressionArrayUnit
   | expression SelfIncrement                          #expressionSufSelfIncrement
   | expression SelfDecrement                          #expressionSufSelfDecrement
   | expression Member member = Identifier             #expressionMemberVisit
