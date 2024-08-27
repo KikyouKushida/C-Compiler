@@ -109,9 +109,6 @@ class functionInformation():
         self.parameterListName = []
         self.haveReturnStatement = False
 
-
-Default_functions = {"print", "println", "printInt", "getString", "getInt", "toString"}
-
 class classInformation():
     def __init__(self):
         self.name = ""
@@ -127,9 +124,67 @@ class scopeInformation():
 scopeInformationStore = [scopeInformation() for _ in range(1000)]
 class_name_set = {}      # string -> classInformation
 function_name_set = {}   # string -> functionInformation
+Default_functions = {}
 
 
 class My_MxParserVisitor(MxParserVisitor):
+
+    def initialize_default_lists(self):
+        tempFunctionInfo = functionInformation()
+        tempFunctionInfo.returnType = ExpressionType.Void
+        tempFunctionInfo.name = "print"
+        tempFunctionInfo.parameterListType = [ExpressionType.Cstring]
+        tempFunctionInfo.parameterListName = ["str"]
+        tempFunctionInfo.haveReturnStatement = False
+        Default_functions["print"] = tempFunctionInfo
+
+        tempFunctionInfo = functionInformation()
+        tempFunctionInfo.returnType = ExpressionType.Void
+        tempFunctionInfo.name = "println"
+        tempFunctionInfo.parameterListType = [ExpressionType.Cstring]
+        tempFunctionInfo.parameterListName = ["str"]
+        tempFunctionInfo.haveReturnStatement = False
+        Default_functions["println"] = tempFunctionInfo
+
+        tempFunctionInfo = functionInformation()
+        tempFunctionInfo.returnType = ExpressionType.Void
+        tempFunctionInfo.name = "printInt"
+        tempFunctionInfo.parameterListType = [ExpressionType.Int]
+        tempFunctionInfo.parameterListName = ["n"]
+        tempFunctionInfo.haveReturnStatement = False
+        Default_functions["printInt"] = tempFunctionInfo
+
+        tempFunctionInfo = functionInformation()
+        tempFunctionInfo.returnType = ExpressionType.Void
+        tempFunctionInfo.name = "printlnInt"
+        tempFunctionInfo.parameterListType = [ExpressionType.Int]
+        tempFunctionInfo.parameterListName = ["n"]
+        tempFunctionInfo.haveReturnStatement = False
+        Default_functions["printlnInt"] = tempFunctionInfo
+
+        tempFunctionInfo = functionInformation()
+        tempFunctionInfo.returnType = ExpressionType.Cstring
+        tempFunctionInfo.name = "getString"
+        tempFunctionInfo.parameterListType = []
+        tempFunctionInfo.parameterListName = []
+        tempFunctionInfo.haveReturnStatement = False
+        Default_functions["getString"] = tempFunctionInfo
+
+        tempFunctionInfo = functionInformation()
+        tempFunctionInfo.returnType = ExpressionType.Int
+        tempFunctionInfo.name = "getInt"
+        tempFunctionInfo.parameterListType = []
+        tempFunctionInfo.parameterListName = []
+        tempFunctionInfo.haveReturnStatement = False
+        Default_functions["getInt"] = tempFunctionInfo
+
+        tempFunctionInfo = functionInformation()
+        tempFunctionInfo.returnType = ExpressionType.Cstring
+        tempFunctionInfo.name = "toString"
+        tempFunctionInfo.parameterListType = [ExpressionType.Int]
+        tempFunctionInfo.parameterListName = ["i"]
+        tempFunctionInfo.haveReturnStatement = False
+        Default_functions["toString"] = tempFunctionInfo
 
     def create_new_scope(self):
         newScopeId = self.scope_count + 1
@@ -146,7 +201,7 @@ class My_MxParserVisitor(MxParserVisitor):
         elif type.Bool() != None: return ExpressionType.Bool
         elif type.String() != None: return ExpressionType.Cstring
         elif type.Void() != None: return ExpressionType.Void
-        else: return ExpressionType.Object
+        else: return type.Identifier().getText()
 
     def translate_typename(self, typeName: MxParser.TypenameContext):
         tempTypeInformation = typeInformation()
@@ -186,7 +241,7 @@ class My_MxParserVisitor(MxParserVisitor):
         if class_name_set.get(name) != None or function_name_set.get(name) != None:
             Error_multiple_definitions(name)
             return False
-        while current_scope != -1:
+        while current_scope != 0:
             tempScopeInformation = scopeInformationStore[current_scope]
             if tempScopeInformation.object.get(name) != None:
                 Error_multiple_definitions(name)
@@ -213,6 +268,7 @@ class My_MxParserVisitor(MxParserVisitor):
         self.function_main_count = 0
         self.current_function = None
         self.current_class = None
+        self.initialize_default_lists()
 
     def Update_function_main_count(self):
         self.function_main_count += 1
@@ -228,6 +284,13 @@ class My_MxParserVisitor(MxParserVisitor):
         if self.function_main_count == 0:
             Error_function_main_count_is_not_one(self.function_main_count)
         self.priority -= 1
+        for function in function_name_set:
+            if function.haveReturnStatement == False:
+                Error_function_lack_returnStatement(function.name)
+        for Class in class_name_set:
+            for function in Class.function:
+                if function.haveReturnStatement == False:
+                    Error_function_lack_returnStatement(function.name)
         print(f"ok check passed.")
         sys.exit(0)
 
@@ -244,31 +307,33 @@ class My_MxParserVisitor(MxParserVisitor):
         self.current_class = None
 
     def visitFunctionDef(self, ctx: MxParser.FunctionDefContext):
-        function_name = ctx.Identifier().getText()
+        function_name = ctx.Identifier()
         type_name = ctx.typename()
         self.check_multiple_identifier(self.current_scope, function_name)
         self.check_valid_typename(type_name)
         self.current_function = function_name
+        print()
         if self.current_class == None:
-            print(f"Global Function Definition: {function_name}")
+            print(f"Global Function Definition: {function_name.getText()}")
         else:
-            print(f"Class {self.current_class} Member Function Definition: {function_name}")
+            print(f"Class {self.current_class} Member Function Definition: {function_name.getText()}")
         tempFunctionInformation = functionInformation()
-        tempFunctionInformation.name = function_name
+        tempFunctionInformation.name = function_name.getText()
         tempFunctionInformation.returnType = self.translate_typename(type_name)
         paralen = 0
         if ctx.parameterList1() != None: paralen = len(ctx.parameterList1().variableConstructor())
         print(f"Length of parameterList is {paralen}.")
+        print()
         for i in range(0, paralen):
             # self.check_no_new_in_parameterList1(ctx.parameterList1().variableConstructor()[i])
             self.check_no_assign_in_parameterList1(ctx.parameterList1().variableConstructor()[i])
-            tempFunctionInformation.parameterListType.append(ctx.parameterList1().typename()[i])
-            tempFunctionInformation.parameterListName.append(ctx.parameterList1().variableConstructor()[i].name())
+            tempFunctionInformation.parameterListType.append(self.translate_typename(ctx.parameterList1().typename()[i]))
+            tempFunctionInformation.parameterListName.append((ctx.parameterList1().variableConstructor()[i].name()).getText())
         if self.current_class == None:
-            function_name_set[function_name] = tempFunctionInformation
+            function_name_set[function_name.getText()] = tempFunctionInformation
         else: 
             tempClassInformation = class_name_set[self.current_class]
-            tempClassInformation.function[function_name] = tempFunctionInformation
+            tempClassInformation.function[function_name.getText()] = tempFunctionInformation
             class_name_set[self.current_class] = tempClassInformation
         for child in ctx.getChildren():
             self.visit(child)
@@ -282,8 +347,15 @@ class My_MxParserVisitor(MxParserVisitor):
             variable_name = ctx.variableConstructor()[i].Identifier()
             self.check_multiple_identifier(self.current_scope, variable_name)
             tempObjectInformation = objectInformation()
-            tempObjectInformation.name = variable_name
+            tempObjectInformation.name = variable_name.getText()
             tempObjectInformation.type = self.translate_typename(type_name)
+            if self.current_class == None:
+                scopeInformationStore[self.current_scope].object[variable_name.getText()] = tempObjectInformation
+                print(f"Variable Definition: {variable_name.getText()}, current_scope = {self.current_scope}")
+            else:
+                tempClassInformation = class_name_set[self.current_class]
+                tempClassInformation.object[variable_name.getText()] = tempObjectInformation
+                print(f"Class member Variable Definition: {variable_name.getText()}, current_scope = {self.current_scope}")
         for child in ctx.getChildren():
             self.visit(child)
 
@@ -359,6 +431,7 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != rhs.type or lhs.dimension != rhs.dimension:
+            print(f"{lhs.type}, {rhs.type}, {lhs.dimension}, {rhs.dimension}")
             Error_expression_type_dismatch(ctx.getText())
 
         # code to deal with assign operation, not yet completed
@@ -370,29 +443,36 @@ class My_MxParserVisitor(MxParserVisitor):
         rhs = ctx.Identifier()
         if lhs.opType != ExpressionType.Object:
             Error_invalid_member_visit(ctx.getText())
+        print(f"ko")
         tempObjectInformation = objectInformation()
         tempTypeInformation = typeInformation()
         class_name = None
         current_scope = self.current_scope
-        while current_scope != -1:
-            tempScopeInformation = scopeInformation[current_scope]
+        while current_scope != 0:
+            tempScopeInformation = scopeInformationStore[current_scope]
             if tempScopeInformation.object.get(lhs.objectInfo.name) != None:
                 tempObjectInformation = tempScopeInformation.object[lhs.objectInfo.name]
-                class_name = tempObjectInformation.type
+                class_name = tempObjectInformation.type.type
                 break
             current_scope = tempScopeInformation.fa
-        if class_name == None:
+        print(f"{class_name}, {type(class_name)}")
+        if class_name == None or type(class_name) != str:
             Error_invalid_member_visit(ctx.getText())
+        print(f"ok")
         tempClassInformation = classInformation()
         tempClassInformation = class_name_set[class_name]
+
+        print(f"size = {len(tempClassInformation.object)}")
     
         if tempClassInformation.function.get(rhs.getText()) != None:
             tempTypeInformation.optype = ExpressionType.Function
-            tempTypeInformation.functionInfo = tempClassInformation.function.get(rhs.value)
+            tempTypeInformation.functionInfo = tempClassInformation.function.get(rhs.getText())
             return tempTypeInformation
         elif tempClassInformation.object.get(rhs.getText()) != None:
             tempTypeInformation.optype = ExpressionType.Object
-            tempTypeInformation.objectInfo = tempClassInformation.function.get(rhs.value)
+            # tempTypeInformation.objectInfo = tempClassInformation.object.get(rhs.getText())
+            # tempTypeInformation.type = tempTypeInformation.objectInfo.type
+            tempTypeInformation = tempClassInformation.object.get(rhs.getText()).type
             return tempTypeInformation
         Error_invalid_member_visit(ctx.getText())
         return 
@@ -427,7 +507,6 @@ class My_MxParserVisitor(MxParserVisitor):
         tempTypeInformation.value = lhs.value ^ rhs.value
 
         return tempTypeInformation
-        return self.visitChildren(ctx)
 
     def visitExpressionBitwiseOr(self, ctx:MxParser.ExpressionBitwiseOrContext):
         lhs = self.visit(ctx.expression(0))
@@ -571,13 +650,16 @@ class My_MxParserVisitor(MxParserVisitor):
         tempTypeInformation = typeInformation()
         name = ctx.Identifier().getText()
         current_scope = self.current_scope
-        while current_scope != -1:
+        print(f"visitExpressionIdentifier, current_scope = {current_scope}, name = {name}")
+        while current_scope != 0:
+            print(f"try to find information in scope {current_scope}")
             tempScopeInformation = scopeInformationStore[current_scope]
             if tempScopeInformation.object.get(name) != None:
                 tempObjectInformation = tempScopeInformation.object[name]
-                tempTypeInformation.type = tempObjectInformation.type
+                tempTypeInformation = tempObjectInformation.type
+                # tempTypeInformation.type = tempObjectInformation.type
                 tempTypeInformation.opType = ExpressionType.Object
-                tempTypeInformation.objectInfo = tempObjectInformation
+                # tempTypeInformation.objectInfo = tempObjectInformation
                 return tempTypeInformation
             current_scope = tempScopeInformation.fa 
         if function_name_set.get(name) != None:
@@ -627,9 +709,25 @@ class My_MxParserVisitor(MxParserVisitor):
         return host
 
     def visitBlockStatement(self, ctx:MxParser.BlockStatementContext):
+        original_scope = self.current_scope
         self.create_new_scope()
         for child in ctx.getChildren():
             self.visit(child)
+        self.current_scope = original_scope
         return 
+    
+    def visitWhileStatement(self, ctx:MxParser.WhileStatementContext):
+        self.priority += 1
+        for child in ctx.getchildren():
+            self.visit(child)
+        self.priority -= 1
+    
+    def visitForStatement(self, ctx:MxParser.ForStatementContext):
+        self.priority += 1
+        for child in ctx.getchildren():
+            self.visit(child)
+        self.priority -= 1
+    
+    
 
       
