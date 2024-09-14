@@ -759,6 +759,10 @@ class My_MxParserVisitor(MxParserVisitor):
             self.visit(child)
         self.priority -= 1
     
+    def visitArrayConstant(self, ctx: MxParser.ArrayConstantContext):
+        
+        return super().visitArrayConstant(ctx)
+    
     
 
       

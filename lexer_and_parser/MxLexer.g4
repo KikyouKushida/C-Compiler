@@ -46,6 +46,7 @@ LogicOr: '||';
 LogicNot: '!';
 
 
+
 Assign: '=';
 SelfIncrement: '++';
 SelfDecrement: '--'; 
@@ -76,10 +77,25 @@ fragment PrintableChar : [\u0020-\u007E];
 fragment EscapeChar: '\\\\' | '\\n' | '\\"';
 Cstring : '"' (PrintableChar | EscapeChar)*? '"';
 
+fragment FormatStrChar:
+    ~[\u0000-\u001F\u007F"\\$]
+    | '\\\\'
+    | '\\n'
+    | '\\"'
+    | '$$'
+    ;
+
 
 CommentLine: '//' ~[\r\n]* -> skip;
 CommentBlock: '/*' .*? '*/' -> skip;
 //Comment is learned from conless's repositories
+
+FormatStrSingle: 'f"' FormatStrChar* '"';
+
+FormatStrBegin: 'f"' FormatStrChar* '$';
+FormatStrBody: '$' FormatStrChar* '$';
+FormatStrEnd: '$' FormatStrChar* '"';
+
 
 
 

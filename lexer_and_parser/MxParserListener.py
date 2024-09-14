@@ -323,6 +323,15 @@ class MxParserListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MxParser#arrayConstant.
+    def enterArrayConstant(self, ctx:MxParser.ArrayConstantContext):
+        pass
+
+    # Exit a parse tree produced by MxParser#arrayConstant.
+    def exitArrayConstant(self, ctx:MxParser.ArrayConstantContext):
+        pass
+
+
     # Enter a parse tree produced by MxParser#statement.
     def enterStatement(self, ctx:MxParser.StatementContext):
         pass
@@ -464,6 +473,15 @@ class MxParserListener(ParseTreeListener):
 
     # Exit a parse tree produced by MxParser#classDef.
     def exitClassDef(self, ctx:MxParser.ClassDefContext):
+        pass
+
+
+    # Enter a parse tree produced by MxParser#formatStr.
+    def enterFormatStr(self, ctx:MxParser.FormatStrContext):
+        pass
+
+    # Exit a parse tree produced by MxParser#formatStr.
+    def exitFormatStr(self, ctx:MxParser.FormatStrContext):
         pass
 
 

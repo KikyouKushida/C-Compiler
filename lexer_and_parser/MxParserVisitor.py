@@ -184,6 +184,11 @@ class MxParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MxParser#arrayConstant.
+    def visitArrayConstant(self, ctx:MxParser.ArrayConstantContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MxParser#statement.
     def visitStatement(self, ctx:MxParser.StatementContext):
         return self.visitChildren(ctx)
@@ -261,6 +266,11 @@ class MxParserVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MxParser#classDef.
     def visitClassDef(self, ctx:MxParser.ClassDefContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MxParser#formatStr.
+    def visitFormatStr(self, ctx:MxParser.FormatStrContext):
         return self.visitChildren(ctx)
 
 

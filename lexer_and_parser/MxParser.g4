@@ -46,6 +46,11 @@ expression:
   ;
 
 
+arrayConstant:
+  True_ | False_ | Integer | Cstring 
+  | LeftBrace arrayConstant (Comma arrayConstant)* RightBrace; 
+
+
 
 statement:
   blockStatement 
@@ -87,3 +92,6 @@ classDef:
     )*
   
   RightBrace Semicolon;
+
+formatStr: FormatStrSingle | (FormatStrBegin expression (FormatStrBody expression)* FormatStrEnd);
+
