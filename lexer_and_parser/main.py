@@ -14,7 +14,8 @@ def main(input_stream):
     visitor.visit(tree)
 
 if __name__ == '__main__':
-    input_stream = FileStream('input.mx')
+#    input_stream = FileStream('input.mx')
+    input_stream = InputStream(sys.stdin.read())
     main(input_stream)
 
 
