@@ -15,8 +15,8 @@ def main(input_stream):
 
 if __name__ == '__main__':
     import sys
-#    input_stream = FileStream('input.mx')
-    input_stream = InputStream(sys.stdin.read())
+    input_stream = FileStream('input.mx')
+#    input_stream = InputStream(sys.stdin.read())
     main(input_stream)
 
 

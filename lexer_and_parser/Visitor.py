@@ -4,84 +4,84 @@ from MxParser import MxParser
 import sys
 
 
-def Error_return_type_dismatch(name):
-    print(f"function {name}, whose return_type dismatches its definition_type.")
+def Error_return_type_dismatch(name, line_number):
+    print(f"In line {line_number}, function {name}, whose return_type dismatches its definition_type.")
     sys.exit(1)
 
-def Error_function_main_count_is_not_one(num):
-    print(f"function_main count is {num}")
-    sys.exit(1)
-
-
-def Error_multiple_definitions(name):
-    print(f"multiple definitions of identifier {name}")
+def Error_function_main_count_is_not_one(num, line_number):
+    print(f"In line {line_number}, function_main count is {num}")
     sys.exit(1)
 
 
-def Error_invalid_control_flow(name):
-    print(f"Invalid control flow, {name} out of any function's domain")
-    sys.exit(1)
-
-def Error_unknown_identifier(name):
-    print(f"Unknown Identifier {name}")
-    sys.exit(1)
-
-def Error_unexpected_item(item_name):
-    print(f"Unexpected item {item_name}")
-    sys.exit(1)
-
-def Error_return_out_of_any_function():
-    print(f"Return statement out of any function")
-    sys.exit(1)
-
-def Error_expression_type_dismatch(string):
-    print(f"Type dismatch in expression {string}")
+def Error_multiple_definitions(name, line_number):
+    print(f"In line {line_number}, multiple definitions of identifier {name}")
     sys.exit(1)
 
 
-def Error_invalid_variable_or_object_name(op, name):
+def Error_invalid_control_flow(name, line_number):
+    print(f"In line {line_number},  control flow, {name} out of any function's domain")
+    sys.exit(1)
+
+def Error_unknown_identifier(name, line_number):
+    print(f"In line {line_number}, Unknown Identifier {name}")
+    sys.exit(1)
+
+def Error_unexpected_item(item_name, line_number):
+    print(f"In line {line_number}, Unexpected item {item_name}")
+    sys.exit(1)
+
+def Error_return_out_of_any_function(line_number):
+    print(f"In line {line_number}, Return statement out of any function")
+    sys.exit(1)
+
+def Error_expression_type_dismatch(string, line_number):
+    print(f"In line {line_number}, Type dismatch in expression {string}")
+    sys.exit(1)
+
+
+def Error_invalid_variable_or_object_name(op, name, line_number):
     if op == 1:
-        print(f"Invalid variable name {name}")
+        print(f"In line {line_number}, Invalid variable name {name}")
     else:
-        print(f"Invalid object name {name}")
+        print(f"In line {line_number}, Invalid object name {name}")
     sys.exit(1)
 
 
-def Error_array_length_not_a_positive_integer(name):
-    print(f"Array {name} length is not an positive integer")
+def Error_array_length_not_a_positive_integer(name, line_number):
+    print(f"In line {line_number}, Array {name} length is not an positive integer")
     sys.exit(1)
 
-def Error_function_lack_returnStatement(name):
-    print(f"function {name} lacks return statements")
+def Error_function_lack_returnStatement(name, line_number):
+    print(f"In line {line_number}, function {name} lacks return statements")
     sys.exit(1)
 
-def Error_name_of_functionCall_not_a_function(name):
-    print(f"attempt to call {name}, which is not a function at all")
+def Error_name_of_functionCall_not_a_function(name, line_number):
+    print(f"In line {line_number}, attempt to call {name}, which is not a function at all")
     sys.exit(1)
 
-def Error_parameterList_of_functionCall_wrong(name):
-    print(f"Call of function {name} has a wrong parameterList")
+def Error_parameterList_of_functionCall_wrong(name, line_number):
+    print(f"In line {line_number}, Call of function {name} has a wrong parameterList")
     sys.exit(1)
 
-def Error_invalid_member_visit(string):
-    print(f"Such member visit {string} is invalid")
+def Error_invalid_member_visit(string, line_number):
+    print(f"In line {line_number}, Such member visit {string} is invalid")
     sys.exit(1)
 
-def Error_invalid_array_unit(string):
-    print(f"Such array unit {string} is invalid")
+def Error_invalid_array_unit(string, line_number):
+    print(f"In line {line_number}, Such array unit {string} is invalid")
     sys.exit(1)
 
-def Error_trinocular_type_invalid(string):
-    print(f"Invalid operator type detected in trinocular expression {string}")
+def Error_trinocular_type_invalid(string, line_number):
+    print(f"In line {line_number}, Invalid operator type detected in trinocular expression {string}")
     sys.exit(1)
 
 
-def Error_dimension_dismatch_in_arrayUnit(expectedDimension, actualDimension, string):
-    print(f"Dimension dismatch in {string}, expected {expectedDimension}, got {actualDimension}")
+def Error_dimension_dismatch_in_arrayUnit(expectedDimension, actualDimension, string, line_number):
+    print(f"In line {line_number}, Dimension dismatch in {string}, expected {expectedDimension}, got {actualDimension}")
     sys.exit(1)
 
-def Error_wrong_expression_type(string):
-    print(f"Wrong expression type detected in expression {string}")
+def Error_wrong_expression_type(string, line_number):
+    print(f"In line {line_number}, Wrong expression type detected in expression {string}")
     sys.exit(1)
 
 
@@ -226,7 +226,8 @@ class My_MxParserVisitor(MxParserVisitor):
             if arrayUnitMember.expression() != None:
                 res = self.visit(arrayUnitMember.expression())
                 if res.type != ExpressionType.Int or res.value < 0:
-                    Error_array_length_not_a_positive_integer(tempTypeInformation.type.getText())
+                    line_number = self.ctx.start.line
+                    Error_array_length_not_a_positive_integer(tempTypeInformation.type.getText(), line_number)
                 tempTypeInformation.arraySize.append(res.value)
             else: tempTypeInformation.arraySize.append(None)
         return tempTypeInformation
@@ -240,7 +241,8 @@ class My_MxParserVisitor(MxParserVisitor):
             if arrayUnitMember.expression() != None:
                 res = self.visit(arrayUnitMember.expression())
                 if res.type != ExpressionType.Int or res.value < 0 :
-                    Error_array_length_not_a_positive_integer(tempTypeInformation.type.getText())
+                    line_number = self.ctx.start.line
+                    Error_array_length_not_a_positive_integer(tempTypeInformation.type.getText(), line_number)
                 tempTypeInformation.arraySize.append(res.value)
             else: tempTypeInformation.arraySize.append(None)
 
@@ -248,17 +250,20 @@ class My_MxParserVisitor(MxParserVisitor):
             return True
         elif tempTypeInformation.type != ExpressionType.Unknown and tempTypeInformation.type != ExpressionType.Object:
             return True 
-        Error_unknown_identifier(typeName.type_().getText())
+        line_number = self.ctx.start.line
+        Error_unknown_identifier(typeName.type_().getText(), line_number)
         return False
 
     def check_multiple_identifier(self, current_scope: int, name: str):
         if class_name_set.get(name) != None or function_name_set.get(name) != None:
-            Error_multiple_definitions(name)
+            line_number = self.ctx.start.line
+            Error_multiple_definitions(name, line_number)
             return False
         while current_scope != 0:
             tempScopeInformation = scopeInformationStore[current_scope]
             if tempScopeInformation.object.get(name) != None:
-                Error_multiple_definitions(name)
+                line_number = self.ctx.start.line
+                Error_multiple_definitions(name, line_number)
                 return False
             current_scope = tempScopeInformation.fa
         return True
@@ -271,7 +276,8 @@ class My_MxParserVisitor(MxParserVisitor):
 
     def check_no_assign_in_parameterList1(self, ctx: MxParser.VariableConstructorContext):
         if ctx.Assign() != None:
-            Error_unexpected_item("=")
+            line_number = ctx.start.line
+            Error_unexpected_item("=", line_number)
             return False
         return True
 
@@ -287,7 +293,8 @@ class My_MxParserVisitor(MxParserVisitor):
     def Update_function_main_count(self):
         self.function_main_count += 1
         if self.function_main_count > 1:
-            Error_function_main_count_is_not_one(self.function_main_count)
+            line_number = self.ctx.start.line
+            Error_function_main_count_is_not_one(self.function_main_count, line_number)
 
 
     def visitProgram(self, ctx: MxParser.ProgramContext):
@@ -296,15 +303,18 @@ class My_MxParserVisitor(MxParserVisitor):
         for child in ctx.getChildren():
             self.visit(child)
         if self.function_main_count == 0:
-            Error_function_main_count_is_not_one(self.function_main_count)
+            line_number = ctx.start.line
+            Error_function_main_count_is_not_one(self.function_main_count, line_number)
         self.priority -= 1
         for function in function_name_set:
             if function_name_set[function].haveReturnStatement == False and function_name_set[function].returnType.type != ExpressionType.Void and function != "main":
-                Error_function_lack_returnStatement(function)
+                line_number = ctx.start.line
+                Error_function_lack_returnStatement(function, line_number)
         for Class in class_name_set:
             for function in class_name_set[Class].function:
                 if class_name_set[Class].function[function].haveReturnStatement == False and class_name_set[Class].function[function].returnType.type != ExpressionType.Void:
-                    Error_function_lack_returnStatement(function)
+                    line_number = ctx.start.line
+                    Error_function_lack_returnStatement(function, line_number)
         print(f"ok check passed.")
         sys.exit(0)
 
@@ -379,17 +389,20 @@ class My_MxParserVisitor(MxParserVisitor):
 
     def visitBreakStatement(self, ctx:MxParser.BreakStatementContext):
         if self.current_priority == 0:
-            Error_invalid_control_flow("break")
+            line_number = ctx.start.line
+            Error_invalid_control_flow("break", line_number)
         return self.visitChildren(ctx)
     
     def visitContinueStatement(self, ctx:MxParser.ContinueStatementContext):
         if self.current_priority == 0:
-            Error_invalid_control_flow("continue")
+            line_number = ctx.start.line
+            Error_invalid_control_flow("continue", line_number)
         return self.visitChildren(ctx)
 
     def visitReturnStatement(self, ctx: MxParser.ReturnStatementContext):
         if self.current_function == None:
-            Error_return_out_of_any_function()
+            line_number = ctx.start.line
+            Error_return_out_of_any_function(line_number)
         if self.current_class == None: # global function
             tempFunctionInformation = function_name_set[self.current_function]
             actual_return_type = typeInformation()
@@ -400,7 +413,8 @@ class My_MxParserVisitor(MxParserVisitor):
                 actual_return_type = self.visit(ctx.expression())
             expected_return_type = tempFunctionInformation.returnType
             if actual_return_type.type != expected_return_type.type or actual_return_type.dimension != expected_return_type.dimension:
-                Error_return_type_dismatch(self.current_function)
+                line_number = ctx.start.line
+                Error_return_type_dismatch(self.current_function, line_number)
             tempFunctionInformation.haveReturnStatement = True
             function_name_set[self.current_function] = tempFunctionInformation
         else:                           # member function
@@ -414,7 +428,8 @@ class My_MxParserVisitor(MxParserVisitor):
                 actual_return_type = self.visit(ctx.expression())
             expected_return_type = tempFunctionInformation.returnType
             if actual_return_type.type != expected_return_type.type or actual_return_type.dimension != expected_return_type.dimension:
-                Error_return_type_dismatch(self.current_function)
+                line_number = ctx.start.line
+                Error_return_type_dismatch(self.current_function, line_number)
             tempFunctionInformation.haveReturnStatement = True
             tempClassInformation.function[self.current_function] = tempFunctionInformation
             class_name_set[self.current_class] = tempClassInformation
@@ -426,7 +441,8 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != ExpressionType.Bool or rhs.type != ExpressionType.Bool or lhs.dimension != 1 or rhs.dimension != 1:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
@@ -438,8 +454,9 @@ class My_MxParserVisitor(MxParserVisitor):
 
     def visitExpressionArrayUnit(self, ctx:MxParser.ExpressionArrayUnitContext):
         lhs = self.visit(ctx.expression())
+        line_number = ctx.start.line
         if lhs.opType != ExpressionType.Object:
-            Error_invalid_array_unit(ctx.getText())
+            Error_invalid_array_unit(ctx.getText(), line_number)
         dimension = len(ctx.arrayUnit())
         # if lhs.dimension != dimension:
         #     Error_dimension_dismatch_in_arrayUnit(lhs.dimension, dimension, ctx.getText())
@@ -448,14 +465,14 @@ class My_MxParserVisitor(MxParserVisitor):
         #     if temp.type != ExpressionType.Int or temp.dimension != 0:
         #         Error_wrong_expression_type(ctx.arrayUnit(i).expression())
         if lhs.dimension > dimension:
-            Error_dimension_dismatch_in_arrayUnit(lhs.dimension, dimension, ctx.getText())
+            Error_dimension_dismatch_in_arrayUnit(lhs.dimension, dimension, ctx.getText(), line_number)
         tempTypeInformation = typeInformation()
         tempTypeInformation.dimension = dimension - lhs.dimension
         tempTypeInformation.type = lhs.type
         for i in range(lhs.dimension):
             temp = self.visit(ctx.arrayUnit(i).expression())
             if temp.type != ExpressionType.Int or temp.dimension != 0:
-                Error_wrong_expression_type(ctx.arrayUnit(i).expression())
+                Error_wrong_expression_type(ctx.arrayUnit(i).expression(), line_number)
         return tempTypeInformation
 
     def visitExpressionAssign(self, ctx:MxParser.ExpressionAssignContext):
@@ -464,7 +481,8 @@ class My_MxParserVisitor(MxParserVisitor):
         rhs = self.visit(ctx.expression(1))
         if lhs.type != rhs.type or lhs.dimension != rhs.dimension:
             print(f"{lhs.type}, {rhs.type}, {lhs.dimension}, {rhs.dimension}")
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
 
         # code to deal with assign operation, not yet completed
 
@@ -474,7 +492,8 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression())
         rhs = ctx.Identifier()
         if lhs.opType != ExpressionType.Object:
-            Error_invalid_member_visit(ctx.getText())
+            line_number = ctx.start.line
+            Error_invalid_member_visit(ctx.getText(), line_number)
         print(f"ko")
         tempObjectInformation = objectInformation()
         tempTypeInformation = typeInformation()
@@ -489,7 +508,8 @@ class My_MxParserVisitor(MxParserVisitor):
             current_scope = tempScopeInformation.fa
         print(f"{class_name}, {type(class_name)}")
         if class_name == None or type(class_name) != str:
-            Error_invalid_member_visit(ctx.getText())
+            line_number = ctx.start.line
+            Error_invalid_member_visit(ctx.getText(), line_number)
         print(f"ok")
         tempClassInformation = classInformation()
         tempClassInformation = class_name_set[class_name]
@@ -505,7 +525,8 @@ class My_MxParserVisitor(MxParserVisitor):
             tempTypeInformation.optype = ExpressionType.Object
             tempTypeInformation.objectName = rhs.getText()
             return tempTypeInformation
-        Error_invalid_member_visit(ctx.getText())
+        line_number = ctx.start.line
+        Error_invalid_member_visit(ctx.getText(), line_number)
         return 
 
     def visitExpressionTrinocular(self, ctx:MxParser.ExpressionTrinocularContext):
@@ -513,7 +534,8 @@ class My_MxParserVisitor(MxParserVisitor):
         b = self.visit(ctx.expression(1))
         c = self.visit(ctx.expression(2))
         if a.type != bool or a.dimension != 0 or b.type != c.type or b.dimension != c.dimension:
-            Error_trinocular_type_invalid(ctx.getText())
+            line_number = ctx.start.line
+            Error_trinocular_type_invalid(ctx.getText(), line_number)
         # returnType equals b's type
         return b
 
@@ -521,7 +543,8 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int or lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
@@ -535,7 +558,8 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int or lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
@@ -549,7 +573,8 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int or lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
@@ -562,26 +587,30 @@ class My_MxParserVisitor(MxParserVisitor):
     def visitExpressionPreSelfDecrement(self, ctx:MxParser.ExpressionPreSelfDecrementContext):
         host = self.visit(ctx.expression())
         if host.type != ExpressionType.Int or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
 
     def visitExpressionSufSelfIncrement(self, ctx:MxParser.ExpressionSufSelfIncrementContext):
         host = self.visit(ctx.expression())
         if host.type != ExpressionType.Int or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
     
     def visitExpressionLogicNot(self, ctx:MxParser.ExpressionLogicNotContext):
         host = self.visit(ctx.expression())
         if host.type != ExpressionType.Bool or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
 
     def visitExpressionArithmeticOp1(self, ctx:MxParser.ExpressionArithmeticOp1Context):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int or lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Int
@@ -594,7 +623,8 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int or lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Int
@@ -606,7 +636,8 @@ class My_MxParserVisitor(MxParserVisitor):
     def visitExpressionAdd(self, ctx:MxParser.ExpressionAddContext):
         host = self.visit(ctx.expression())
         if host.type != ExpressionType.Int or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
 
     def visitExpressionNew(self, ctx:MxParser.ExpressionNewContext):
@@ -617,7 +648,8 @@ class My_MxParserVisitor(MxParserVisitor):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
         if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int or lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            line_number = ctx.start.line
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
         tempTypeInformation.dimension = 0
@@ -626,12 +658,13 @@ class My_MxParserVisitor(MxParserVisitor):
     def visitExpressionCompare2(self, ctx:MxParser.ExpressionCompare2Context):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
+        line_number = ctx.start.line
         if lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         if lhs.type != ExpressionType.Int and lhs.type != ExpressionType.Cstring and lhs.type != ExpressionType.Bool:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         if rhs.type != ExpressionType.Int and rhs.type != ExpressionType.Cstring and rhs.type != ExpressionType.Bool:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
         tempTypeInformation.dimension = 0
@@ -640,8 +673,9 @@ class My_MxParserVisitor(MxParserVisitor):
     def visitExpressionLogicOr(self, ctx:MxParser.ExpressionLogicOrContext):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
+        line_number = ctx.start.line
         if lhs.type != ExpressionType.Bool or rhs.type != ExpressionType.Bool or lhs.dimension != 0 or rhs.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Bool
@@ -653,8 +687,9 @@ class My_MxParserVisitor(MxParserVisitor):
     def visitExpressionFunctionCall(self, ctx:MxParser.ExpressionFunctionCallContext):
         # to be continued
         function_ = self.visit(ctx.expression())
+        line_number = ctx.start.line
         if function_.type != ExpressionType.Function:
-            Error_name_of_functionCall_not_a_function(ctx.exception().getText())
+            Error_name_of_functionCall_not_a_function(ctx.exception().getText(), line_number)
         
         return None
 
@@ -664,8 +699,9 @@ class My_MxParserVisitor(MxParserVisitor):
     def visitExpressionBitwiseAnd(self, ctx:MxParser.ExpressionBitwiseAndContext):
         lhs = self.visit(ctx.expression(0))
         rhs = self.visit(ctx.expression(1))
+        line_number = ctx.start.line
         if lhs.type != ExpressionType.Int or rhs.type != ExpressionType.Int:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         
         tempTypeInformation = typeInformation()
         tempTypeInformation.type = ExpressionType.Int
@@ -680,14 +716,16 @@ class My_MxParserVisitor(MxParserVisitor):
     
     def visitExpressionBitwiseNot(self, ctx:MxParser.ExpressionBitwiseNotContext):
         host = self.visit(ctx.expression())
+        line_number = ctx.start.line
         if host.type != ExpressionType.Int or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
 
     def visitExpressionIdentifier(self, ctx:MxParser.ExpressionIdentifierContext):
         tempTypeInformation = typeInformation()
         name = ctx.Identifier().getText()
         current_scope = self.current_scope
+        line_number = ctx.start.line
         print(f"visitExpressionIdentifier, current_scope = {current_scope}, name = {name}")
         while current_scope != 0:
             print(f"try to find information in scope {current_scope}")
@@ -710,13 +748,14 @@ class My_MxParserVisitor(MxParserVisitor):
             tempTypeInformation.functionInfo = Default_functions.get(name)
             return tempTypeInformation
         # ???
-        Error_unknown_identifier(ctx.Identifier().getText())
+        Error_unknown_identifier(ctx.Identifier().getText(), line_number)
         return tempTypeInformation
 
     def visitExpressionSufSelfDecrement(self, ctx:MxParser.ExpressionSufSelfDecrementContext):
         host = self.visit(ctx.expression())
+        line_number = ctx.start.line
         if host.type != ExpressionType.Int or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
 
     def visitExpressionConstant(self, ctx:MxParser.ExpressionConstantContext):
@@ -730,8 +769,9 @@ class My_MxParserVisitor(MxParserVisitor):
 
     def visitExpressionSubtract(self, ctx:MxParser.ExpressionSubtractContext):
         host = self.visit(ctx.expression())
+        line_number = ctx.start.line
         if host.type != ExpressionType.Int or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
 
     def visitExpressionThis(self, ctx:MxParser.ExpressionThisContext):
@@ -741,8 +781,9 @@ class My_MxParserVisitor(MxParserVisitor):
 
     def visitExpressionPreSelfIncrement(self, ctx:MxParser.ExpressionPreSelfIncrementContext):
         host = self.visit(ctx.expression())
+        line_number = ctx.start.line
         if host.type != ExpressionType.Int or host.dimension != 0:
-            Error_expression_type_dismatch(ctx.getText())
+            Error_expression_type_dismatch(ctx.getText(), line_number)
         return host
 
     def visitBlockStatement(self, ctx:MxParser.BlockStatementContext):
