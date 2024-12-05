@@ -464,10 +464,10 @@ class My_MxParserVisitor(MxParserVisitor):
         #     temp = self.visit(ctx.arrayUnit(i).expression())
         #     if temp.type != ExpressionType.Int or temp.dimension != 0:
         #         Error_wrong_expression_type(ctx.arrayUnit(i).expression())
-        if lhs.dimension > dimension:
+        if lhs.dimension < dimension:
             Error_dimension_dismatch_in_arrayUnit(lhs.dimension, dimension, ctx.getText(), line_number)
         tempTypeInformation = typeInformation()
-        tempTypeInformation.dimension = dimension - lhs.dimension
+        tempTypeInformation.dimension = lhs.dimension - dimension
         tempTypeInformation.type = lhs.type
         for i in range(lhs.dimension):
             temp = self.visit(ctx.arrayUnit(i).expression())
